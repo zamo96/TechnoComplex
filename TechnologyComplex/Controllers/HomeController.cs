@@ -11,15 +11,15 @@ namespace TechnologyComplex.Controllers
 {
     public class HomeController : Controller
     {
-        private CompanyContext db;
-        public HomeController(CompanyContext context)
+        private AreaContext db;
+        public HomeController(AreaContext context)
         {
             db = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await db.Company.ToListAsync());
+            return View(await db.Area.ToListAsync());
         }
 
     
