@@ -12,6 +12,13 @@
     <PackageReference Include="NuGet.CommandLine" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Views\Home\Working hours.html" />
+    <None Remove="Views\Home\Working hours.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\EquipmentContext %28копировать%29.cs" />
+  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

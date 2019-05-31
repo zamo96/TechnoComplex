@@ -55,7 +55,7 @@ namespace TechnologyComplex
               options.UseSqlServer(connection));
             services.AddDbContext<EquipmentContext>(options =>
               options.UseSqlServer(connection));
-            services.AddDbContext<DriveContext>(options =>
+            services.AddDbContext<MotorContext>(options =>
               options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
