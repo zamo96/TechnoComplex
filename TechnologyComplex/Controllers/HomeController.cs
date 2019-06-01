@@ -20,10 +20,12 @@ namespace TechnologyComplex.Controllers
             db = context;
             Db_Motor_Context = Motor_Context;
         }
-         public async Task<IActionResult> Motor_Working_Hours_For_Date()
+        [HttpPost]
+         public async Task<IActionResult> Motor_Working_Hours_For_Date(string date)
          {
-
-            return View("Automat_Kvadrablock_Working_hours", await Db_Motor_Context.Motor.OrderBy(x => x.Date).ToListAsync());
+            DateTime dateTime = DateTime.Parse(date);
+            dateTime = new DateTime(2019 - 31 - 05);
+            return View("Automat_Kvadrablock_Working_hours", await Db_Motor_Context.Motor.Where(x => x.Date.Year == dateTime.Year && x.Date.Month == dateTime.Month && x.Date.Day == dateTime.Day && x.Name == "Kvadrablock_Work_Hours").OrderBy(x => x.Date).ToListAsync());
          }
 
       

@@ -33,17 +33,39 @@
 </head>
 <body>
     <div style="width: 100px;height: 100px; position: relative;top: 10px;left: 0px">
+        @using (Html.BeginForm("Motor_Working_Hours_For_Date", "Home"))
+    {
+        <p class="floated">Выбрать дату: <input type="text" class="" id="datepicker" name="date" autocomplete="off"></p>
+        <input type="submit" />
 
+}
     </div>
     <div id="barchart" style="width: 600px;height: 500px; position: relative;top: 120px;left: 0px">
     
     </div>
     @{
-        int KvadrablockHoursForDay;
-        KvadrablockHoursForDay = (Convert.ToInt32(Model.Last().Value.ToString()) - Convert.ToInt32(Model.First().Value.ToString())) ;
+        int KvadrablockHoursForDay = 0;
+        if (Model.Count() != 0)
+        {
+            KvadrablockHoursForDay = (Convert.ToInt32(Model.Last().Value.ToString()) - Convert.ToInt32(Model.First().Value.ToString()));
+        }
+
     }
+
     <script>
-// Create the chart
+    jQuery(function ($) {
+
+            $("#datepicker").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+
+        });
+    </script>
+
+    <script>
+
+//*** Create the Bar chart ***\\
+
 Highcharts.chart('barchart', {
   chart: {
     type: 'column'
