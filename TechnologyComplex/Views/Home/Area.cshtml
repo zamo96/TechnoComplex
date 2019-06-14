@@ -1,0 +1,70 @@
+﻿@model IEnumerable<TechnologyComplex.Models.Area>
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Main</title>
+    <style>
+        div {
+            border-radius: 5px;
+        }
+        input {
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+        .p {
+            display: table-cell;
+            font-size: xx-large;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+    </style>
+</head>
+@{
+    int h = 230;
+    int w = 295;
+    int t = 0;
+    int l = 0;
+    int t_setpoint = 240;
+    int l_setpoint = 310;
+    int columns = 4;
+    int number_of_column = 0;
+
+}
+<body>
+    <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
+        @{
+        foreach (var area in Model)
+        {
+            number_of_column++;
+
+            if (number_of_column == (columns + 1))
+            {
+                t += t_setpoint;
+                l = 0;
+                number_of_column = 1;
+            }
+            string height = h.ToString() + "px";
+            string width = w.ToString() + "px";
+            string top = t.ToString() + "px";
+            string left = l.ToString() + "px";
+                 <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
+            @using (Html.BeginForm("Area", "Home", FormMethod.Post))
+                 {
+            <input type="hidden" value="@area.Id" name="Id" />
+            <input class="p" value="@area.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
+                 }
+                     </div>
+        l += l_setpoint;
+
+    }
+        }
+
+    </div>
+
+
+
+</body>
+
+

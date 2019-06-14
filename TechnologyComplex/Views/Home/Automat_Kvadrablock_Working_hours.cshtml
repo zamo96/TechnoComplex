@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<TechnologyComplex.Models.Motor>
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <!DOCTYPE html>
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
     <script src="https://code.highcharts.com/modules/xrange.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -16,6 +18,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <meta charset="utf-8">
+
     <title>Main</title>
     <style>
         div {
@@ -32,41 +35,95 @@
     </style>
 </head>
 <body>
-    <div style="width: 100px;height: 100px; position: relative;top: 10px;left: 0px">
-        @using (Html.BeginForm("Motor_Working_Hours_For_Date", "Home"))
-    {
-        <p class="floated">Выбрать дату: <input type="text" class="" id="datepicker" name="date" autocomplete="off"></p>
-        <input type="submit" />
-
-}
-    </div>
-    <div id="barchart" style="width: 600px;height: 500px; position: relative;top: 120px;left: 0px">
-    
-    </div>
     @{
+        List<TechnologyComplex.Models.Gant_Diagram> Kvadrablock_Main_Drive_Gant = new List<TechnologyComplex.Models.Gant_Diagram>();
+        List<TechnologyComplex.Models.Time_Help> Kvadrablock_Main_Drive_Time = new List<TechnologyComplex.Models.Time_Help>();
+        List<TechnologyComplex.Models.Motor> Kvadrablock_Main_Drive = Model.Where(x => x.Name.Contains("Kvadrablock_Main_Drive_On")).OrderBy(x => x.Date).ToList();
+        List<TechnologyComplex.Models.Motor> Kvadrablock_Work_Hours = Model.Where(x => x.Name.Contains("Kvadrablock_Main_Drive_Work_Hours")).OrderBy(x => x.Date).ToList();
         int KvadrablockHoursForDay = 0;
+        DateTime Visible_Date = DateTime.Today;
+        if (Model.Count() == 0)
+        {
+            Kvadrablock_Main_Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(0, 0, 0));
+        }
+
+        DateTime JsTimeFormat;
+        DateTime Start;
+        DateTime End;
+
         if (Model.Count() != 0)
         {
-            KvadrablockHoursForDay = (Convert.ToInt32(Model.Last().Value.ToString()) - Convert.ToInt32(Model.First().Value.ToString()));
+            KvadrablockHoursForDay = Convert.ToInt32(Kvadrablock_Work_Hours.Last().Value.ToString()) - Convert.ToInt32(Kvadrablock_Work_Hours.First().Value.ToString());
+            Visible_Date = Kvadrablock_Work_Hours.Last().Date;
+
+
+            for (int i = 0; i < Kvadrablock_Main_Drive.Count(); i++)
+            {
+                if (Kvadrablock_Main_Drive[i].Value == "1" && (i + 1) < Kvadrablock_Main_Drive.Count)
+                {
+                    Kvadrablock_Main_Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Kvadrablock_Main_Drive[i].Date, Kvadrablock_Main_Drive[i + 1].Date));
+
+                }
+                if (Kvadrablock_Main_Drive[i].Value == "1" && (i + 1) >= Kvadrablock_Main_Drive.Count)
+                {
+                    Kvadrablock_Main_Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Kvadrablock_Main_Drive[i].Date, new DateTime(Kvadrablock_Main_Drive[i].Date.Year, Kvadrablock_Main_Drive[i].Date.Month, Kvadrablock_Main_Drive[i].Date.Day, 23, 59, 59)));
+                }
+            }
+
+            for (int i = 0; i < Kvadrablock_Main_Drive_Time.Count; i++)
+            {
+                // Для Диаграммы Ганта
+                JsTimeFormat = new DateTime(1970, 1, 1).ToUniversalTime();
+                Start = Kvadrablock_Main_Drive_Time[i].Time_Start.ToUniversalTime();
+                End = Kvadrablock_Main_Drive_Time[i].Time_End.ToUniversalTime();
+                TimeSpan start = new TimeSpan(Start.Ticks - JsTimeFormat.Ticks);
+                TimeSpan end = new TimeSpan(End.Ticks - JsTimeFormat.Ticks);
+                Kvadrablock_Main_Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(start.TotalMilliseconds, end.TotalMilliseconds, 0));
+            }
+
         }
+        var Kvadrablock_Main_Drive_For_Gant = JsonConvert.SerializeObject(Kvadrablock_Main_Drive_Gant);
+
+
+
+
 
     }
 
-    <script>
-    jQuery(function ($) {
+    <div style="width: 100px;height: 100px; position: relative;top: 10px;left: 0px">
+        @using (Html.BeginForm("Motor_Working_Hours_For_Date", "Home"))
+        {
+
+            <p class="floated">Выбрать дату: <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" class="" id="datepicker" name="date" autocomplete="off"></p>
+            <input type="submit" />
+
+        }
+    </div>
+    <div style="margin: 120px auto; width: 1400px; height: 800px; position: relative;">
+        <div id="chart_work_motor_hours_for_day" style="width: 400px;height: 400px; position: absolute;top: 0px;left: 0px">
+
+        </div>
+        <div id="chart_work_motor" style="width: 800px;height: 400px; position: absolute;top: 0px;left: 410px">
+
+        </div>
+    </div>
+
+
+    <script>jQuery(function ($) {
 
             $("#datepicker").datepicker({
                 dateFormat: "yy-mm-dd"
             });
 
-        });
-    </script>
+        });</script>
 
     <script>
 
 //*** Create the Bar chart ***\\
 
-Highcharts.chart('barchart', {
+// Диаграмма времени работы двигателя в течении выбранного дня
+
+Highcharts.chart('chart_work_motor_hours_for_day',{
   chart: {
     type: 'column'
   },
@@ -129,7 +186,49 @@ Highcharts.chart('barchart', {
 });
     </script>
 
+
+
+    <script>
+
+    Highcharts.chart('chart_work_motor', {
+        chart: {
+            type: 'xrange'
+        },
+        title: {
+            text: 'Работа привода'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                hour: '%H:%M'
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            categories: ['Главный привод Квадраблока '],
+            reversed: true
+        },
+        series: [{
+            name: 'Объекты',
+            // pointPadding: 0,
+            // groupPadding: 0,
+            borderColor: 'green',
+            pointWidth: 20,
+            data: @Html.Raw(Kvadrablock_Main_Drive_For_Gant)
+        }],
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        }
+    });
+
+
+    </script>
+
 </body>
-</html>
+
 
 

@@ -3,8 +3,8 @@ namespace TechnologyComplex.Models
 {
     public class WorkFlow_Area
     {
-        public int Id { get; set; }
-        public string Name { get; set; } 
+        public int Id_WorkFlow { get; set; }
+        public int Id_Area { get; set; }
 
         public WorkFlow_Area()
         {

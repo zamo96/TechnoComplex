@@ -19,6 +19,11 @@
   <ItemGroup>
     <Compile Remove="Models\EquipmentContext %28копировать%29.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Models\Gant_Diagram.cshtml" />
+    <Content Remove="Models\TimeHelp.cshtml" />
+    <Content Remove="Models\Gant_Diagram.cshtml" />
+  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
