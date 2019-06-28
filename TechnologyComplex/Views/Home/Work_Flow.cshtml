@@ -7,11 +7,13 @@
         div {
             border-radius: 5px;
         }
+
         input {
             border-radius: 5px;
             outline: none;
             border: none;
         }
+
         .p {
             display: table-cell;
             font-size: xx-large;
@@ -32,36 +34,37 @@
     int number_of_column = 0;
 
 }
-<body> 
+<body>
+    <p class="p" style="margin:10px auto;">Work Flows of @ViewBag.Message </p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
         @{
-        foreach (var workFlow in Model)
-        {
-            number_of_column++;
-
-            if (number_of_column == (columns + 1))
+            foreach (var workFlow in Model)
             {
-                t += t_setpoint;
-                l = 0;
-                number_of_column = 1;
+                number_of_column++;
+
+                if (number_of_column == (columns + 1))
+                {
+                    t += t_setpoint;
+                    l = 0;
+                    number_of_column = 1;
+                }
+                string height = h.ToString() + "px";
+                string width = w.ToString() + "px";
+                string top = t.ToString() + "px";
+                string left = l.ToString() + "px";
+
+                <div style="display:table; width: @width; height: @height; position: absolute;top: @top; left: @left">
+
+                    @using (Html.BeginForm("Area", "Home", FormMethod.Post))
+                    {
+                        <input type="hidden" value="@workFlow.Id" name="Id" />
+
+                        <input class="p" value="@workFlow.Name" name="Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height;top: 0px; left: 0px" />
+                    }
+
+                </div>
+                l += l_setpoint;
             }
-            string height = h.ToString() + "px";
-            string width = w.ToString() + "px";
-            string top = t.ToString() + "px";
-            string left = l.ToString() + "px";
-        <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
-            <p class="p">Hello</p>
-
-            @using (Html.BeginForm("Work_Flow", "Home", FormMethod.Post))
-             {
-        <input type="hidden" value="@workFlow.Id" name="Id" />
-        <input class="p" value="@workFlow.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
-            }                          
-
-        </div>
-        l += l_setpoint;
-
-    }
         }
 
     </div>
@@ -69,4 +72,5 @@
 
 
 </body>
+</html>
 

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<TechnologyComplex.Models.Motor>
+<!DOCTYPE html>
+<head>
+
+    <link rel="stylesheet" href="~/css/ButtonHover.css" />
+
+    <meta charset="utf-8">
+    <title>Main</title>
+
+    <style>
+
+        div {
+            border-radius: 5px;
+        }
+
+        input {
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+
+        .p {
+            font-family: ‘Lato’, sans-serif;
+            display: table-cell;
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        td, th {
+            font-family: ‘Lato’, sans-serif;
+            border: solid 1px black;
+            padding: 30px;
+            position: relative;
+        }
+
+        td {
+            font-family: ‘Lato’, sans-serif;
+            font-size: 44px;
+            font-weight: 300;
+            line-height: 58px;
+            margin: 0 0 58px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <p class="p" style="margin:10px auto;">Motors of @ViewBag.Name</p>
+    <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
+    
+        <table border="1" cellspacing="100" style=" width: 1200px ">
+    <tr><td>Name of Motor</td><td>Model</td></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+
+        <th>
+            @item.Name
+        </th>
+        <th>
+            @using (Html.BeginForm("Motor_Panel", "Home", FormMethod.Post))
+    {
+        <input type="hidden" value="@item.Id_Equipment" name="id_equipment" />
+        <input type="hidden" value="@item.Id" name="id_motor" />
+        <input type="hidden" value="@item.Name" name="Name" />
+        <button class="learn-more">
+            <div class="circle">
+                <span class="icon arrow"></span>
+            </div>
+            <p class="button-text" style="font-size: 1rem">View More</p>
+        </button>
+
+}
+        </th>
+
+        </tr>
+    }
+        </table>
+
+
+
+
+
+         </div>
+
+
+
+
+</body>
+
+

@@ -10,6 +10,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="jQuery" Version="3.4.1" />
     <PackageReference Include="NuGet.CommandLine" Version="5.0.2" />
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
+    <PackageReference Include="NUnit.Runners" Version="3.10.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,23 @@
     <Content Remove="Models\Gant_Diagram.cshtml" />
     <Content Remove="Models\TimeHelp.cshtml" />
     <Content Remove="Models\Gant_Diagram.cshtml" />
+    <Content Remove="wwwroot\images\Unique-Div-Top.jpg" />
+    <Content Remove="wwwroot\images\Valve.jpg" />
+    <Content Remove="wwwroot\css\Button Hover.css" />
+    <Content Remove="wwwroot\css\ButtonHover.scss" />
+    <Content Remove="wwwroot\css\gulpfile.js" />
+    <Content Remove="wwwroot\css\package.json" />
+    <Content Remove="wwwroot\css\lightpick.css" />
+    <Content Remove="wwwroot\js\lightpick.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\css\Motor_Working_Hours.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\css\lightpick.css" />
+    <None Include="wwwroot\js\lightpick.js" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

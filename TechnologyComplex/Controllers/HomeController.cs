@@ -12,13 +12,14 @@ namespace TechnologyComplex.Controllers
     public class HomeController : Controller
     {
         private AreaContext db;
-        private MotorContext Db_Motor_Context;
+        
+        private Motor_ValueContext Db_Motor_Context;
         private Technology_Complex_Context Db_Technology_Complex_Context;
         public DateTime Today = DateTime.Today;
 
 
 
-        public HomeController(AreaContext context,MotorContext Motor_Context, Technology_Complex_Context technology_Complex_Context)
+        public HomeController(AreaContext context, Motor_ValueContext Motor_Context, Technology_Complex_Context technology_Complex_Context)
         {
             db = context;
             Db_Motor_Context = Motor_Context;
@@ -26,15 +27,18 @@ namespace TechnologyComplex.Controllers
         }
 
         [HttpPost]
-         public async Task<IActionResult> Motor_Working_Hours_For_Date(string date)
+         public async Task<IActionResult> Motor_Working_Hours_For_Date(string date, int Id_Motor, int Id_Equipment, string Name)
          {
+            ViewBag.Id_Equipment = Id_Equipment;
+            ViewBag.Id_Motor = Id_Motor;
+            ViewBag.Name = Name;
             if (date != null)
             {
                 DateTime dateTime = DateTime.Parse(date);
-                return View("Automat_Kvadrablock_Working_hours", await Db_Motor_Context.Motor.Where(x => x.Date.Year == dateTime.Year && x.Date.Month == dateTime.Month && x.Date.Day == dateTime.Day).OrderBy(x => x.Date).ToListAsync());
+                return View("Motor_Working_Hours", await Db_Technology_Complex_Context.Motor_Value.Where(x => x.Id_Motor ==  Id_Motor && x.Id_Equipment == Id_Equipment && x.Date.Year == dateTime.Year && x.Date.Month == dateTime.Month && x.Date.Day == dateTime.Day).OrderBy(x => x.Date).ToListAsync());
             }
             else
-                return View("Automat_Kvadrablock_Working_hours", await Db_Motor_Context.Motor.Where(x => x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day).OrderBy(x => x.Date).ToListAsync());
+                return View("Motor_Working_Hours", await Db_Technology_Complex_Context.Motor_Value.Where(x => x.Id_Motor == Id_Motor && x.Id_Equipment == Id_Equipment && x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day).OrderBy(x => x.Date).ToListAsync());
          }
 
         public async Task<IActionResult> Facility()
@@ -44,7 +48,7 @@ namespace TechnologyComplex.Controllers
         }
 
         [HttpPost]
-        public IActionResult Work_Flow(int id)
+        public IActionResult Work_Flow(int id, string Name)
         {
             List<int> Work_Flows = new List<int>();
             foreach (var workflow in Db_Technology_Complex_Context.Facility_WorkFlow)
@@ -65,11 +69,12 @@ namespace TechnologyComplex.Controllers
                     }
                 }
             }
+            ViewBag.Message = Name;
             return View(workFlows);
         }
 
         [HttpPost]
-        public IActionResult Area(int id)
+        public IActionResult Area(int id, string Name)
         {
             List<int> Areas = new List<int>();
             foreach (var area in Db_Technology_Complex_Context.WorkFlow_Area)
@@ -90,19 +95,109 @@ namespace TechnologyComplex.Controllers
                     }
                 }
             }
+            ViewBag.Message = Name;
             return View(areas);
+        }
+
+        [HttpPost]
+        public IActionResult Unit(int id, string Name)
+        {
+            List<int> Units = new List<int>();
+            foreach (var unit in Db_Technology_Complex_Context.Area_Unit)
+            {
+                if (unit.Id_Area == id)
+                {
+                    Units.Add(unit.Id_Unit);
+                }
+            }
+            List<TechnologyComplex.Models.Unit> units = new List<TechnologyComplex.Models.Unit>();
+            foreach (var unit in Db_Technology_Complex_Context.Unit)
+            {
+                foreach (var un in Units)
+                {
+                    if (unit.Id == un)
+                    {
+                        units.Add(unit);
+                    }
+                }
+            }
+            ViewBag.Message = Name;
+            return View(units);
+        }
+
+        [HttpPost]
+        public IActionResult Equipment(int id, string Name)
+        {
+            List<int> Equipments = new List<int>();
+            foreach (var equipment in Db_Technology_Complex_Context.Unit_Equipment)
+            {
+                if (equipment.Id_Unit == id)
+                {
+                    Equipments.Add(equipment.Id_Equipment);
+                }
+            }
+            List<TechnologyComplex.Models.Equipment> equipments = new List<TechnologyComplex.Models.Equipment>();
+            foreach (var equipment in Db_Technology_Complex_Context.Equipment)
+            {
+                foreach (var Eq in Equipments)
+                {
+                    if (equipment.Id == Eq)
+                    {
+                        equipments.Add(equipment);
+                    }
+                }
+            }
+            ViewBag.Message = Name;
+            return View(equipments);
+        }
+
+        [HttpPost]
+        public IActionResult Control_Module(int id_equipment, string Name)
+        {
+            ViewBag.Id = id_equipment;
+            ViewBag.Name = Name;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Motor_Panel(int id_equipment, int id_motor, string Name)
+        {
+            ViewBag.Id_Equipment = id_equipment;
+            ViewBag.Id_Motor = id_motor;
+            ViewBag.Name = Name;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Motor(int id_equipment, string Name)
+        {
+            ViewBag.Id = id_equipment;
+            ViewBag.Name = Name;
+
+            return View(await Db_Technology_Complex_Context.Motor.Where(x => x.Id_Equipment == id_equipment).OrderBy(x => x.Id).ToListAsync());
         }
 
         public async Task<IActionResult> Index()
         {
-            
+
             return View(await db.Area.ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Motor_Working_hours(int Id_Motor, int Id_Equipment, string Name)
+        {
+            ViewBag.Id_Equipment = Id_Equipment;
+            ViewBag.Id_Motor = Id_Motor;
+            ViewBag.Name = Name;
+
+            return View(await Db_Technology_Complex_Context.Motor_Value.Where(x=>x.Id_Motor == Id_Motor && x.Id_Equipment == Id_Equipment && x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day).OrderBy(x => x.Date).ToListAsync());
+                
         }
 
         public async Task<IActionResult> Automat_Kvadrablock_Working_hours()
         {
 
-            return View(await Db_Motor_Context.Motor.Where(x => x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day && x.Name == "Kvadrablock_Work_Hours").OrderBy(x => x.Date).ToListAsync());
+            return View(await Db_Motor_Context.Motor_Value.Where(x => x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day && x.Name == "Kvadrablock_Work_Hours").OrderBy(x => x.Date).ToListAsync());
         }
 
         public IActionResult Filling_automats()

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TechnologyComplex.Models.Motor>
+﻿@model IEnumerable<TechnologyComplex.Models.Motor_Value>
 @using Newtonsoft.Json
 @{
     ViewData["Title"] = "Home Page";
@@ -38,8 +38,8 @@
     @{
         List<TechnologyComplex.Models.Gant_Diagram> Kvadrablock_Main_Drive_Gant = new List<TechnologyComplex.Models.Gant_Diagram>();
         List<TechnologyComplex.Models.Time_Help> Kvadrablock_Main_Drive_Time = new List<TechnologyComplex.Models.Time_Help>();
-        List<TechnologyComplex.Models.Motor> Kvadrablock_Main_Drive = Model.Where(x => x.Name.Contains("Kvadrablock_Main_Drive_On")).OrderBy(x => x.Date).ToList();
-        List<TechnologyComplex.Models.Motor> Kvadrablock_Work_Hours = Model.Where(x => x.Name.Contains("Kvadrablock_Main_Drive_Work_Hours")).OrderBy(x => x.Date).ToList();
+        List<TechnologyComplex.Models.Motor_Value> Kvadrablock_Main_Drive = Model.Where(x => x.Name.Contains("Kvadrablock_Main_Drive_On")).OrderBy(x => x.Date).ToList();
+        List<TechnologyComplex.Models.Motor_Value> Kvadrablock_Work_Hours = Model.Where(x => x.Name.Contains("Kvadrablock_Main_Drive_Work_Hours")).OrderBy(x => x.Date).ToList();
         int KvadrablockHoursForDay = 0;
         DateTime Visible_Date = DateTime.Today;
         if (Model.Count() == 0)

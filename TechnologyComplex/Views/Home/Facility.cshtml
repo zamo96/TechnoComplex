@@ -33,6 +33,7 @@
 
 }
 <body>
+    <p class="p" style="margin:10px auto;">Facilities</p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
         @{
             foreach (var facility in Model)
@@ -49,16 +50,17 @@
                 string width = w.ToString() + "px";
                 string top = t.ToString() + "px";
                 string left = l.ToString() + "px";
-            <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
+                <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
 
 
                     @using (Html.BeginForm("Work_Flow", "Home", FormMethod.Post))
-                     {
-                <input type="hidden" value="@facility.Id" name="Id" />
-                <input class="p" value="@facility.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
-                     }
+                    {
+                        <input type="hidden" value="@facility.Id" name="Id" />
+                        <input type="hidden" value="@facility.Name" name="Name" />
+                        <input class="p" value="@facility.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
+                    }
 
-            </div>
+                </div>
                 l += l_setpoint;
 
             }

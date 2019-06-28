@@ -1,0 +1,256 @@
+﻿@model IEnumerable<TechnologyComplex.Models.Motor_Value>
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="~/css/lightpick.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+    <script src="~/js/lightpick.js"></script>
+
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/modules/xrange.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <meta charset="utf-8">
+
+    <title>Main</title>
+    <style>
+        div {
+            border-radius: 5px;
+        }
+
+        .p {
+            display: table-cell;
+            font-size: x-large;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+    </style>
+</head>
+<body>
+    @{
+        List<TechnologyComplex.Models.Gant_Diagram> Drive_Gant = new List<TechnologyComplex.Models.Gant_Diagram>();
+        List<TechnologyComplex.Models.Time_Help> Drive_Time = new List<TechnologyComplex.Models.Time_Help>();
+        List<TechnologyComplex.Models.Motor_Value> Drive = Model.Where(x => x.Name.Contains("Drive_On")).OrderBy(x => x.Date).ToList();
+        List<TechnologyComplex.Models.Motor_Value> Work_Hours = Model.Where(x => x.Name.Contains("Work_Hours")).OrderBy(x => x.Date).ToList();
+        int MotorHoursForDay = 0;
+        DateTime Visible_Date = DateTime.Today;
+        if (Model.Count() == 0)
+        {
+            Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(0, 0, 0));
+        }
+
+        DateTime JsTimeFormat;
+        DateTime Start;
+        DateTime End;
+
+        if (Model.Count() != 0)
+        {
+            MotorHoursForDay = Convert.ToInt32(Work_Hours.Last().Value.ToString()) - Convert.ToInt32(Work_Hours.First().Value.ToString());
+            Visible_Date = Work_Hours.Last().Date;
+
+
+            for (int i = 0; i < Drive.Count(); i++)
+            {
+                if (Drive[i].Value == "1" && (i + 1) < Drive.Count)
+                {
+                    Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].Date,Drive[i + 1].Date));
+
+                }
+                if (Drive[i].Value == "1" && (i + 1) >= Drive.Count)
+                {
+                    Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].Date, new DateTime(Drive[i].Date.Year, Drive[i].Date.Month, Drive[i].Date.Day, 23, 59, 59)));
+                }
+            }
+
+            for (int i = 0; i < Drive_Time.Count; i++)
+            {
+                // Для Диаграммы Ганта
+                JsTimeFormat = new DateTime(1970, 1, 1).ToUniversalTime();
+                Start = Drive_Time[i].Time_Start.ToUniversalTime();
+                End = Drive_Time[i].Time_End.ToUniversalTime();
+                TimeSpan start = new TimeSpan(Start.Ticks - JsTimeFormat.Ticks);
+                TimeSpan end = new TimeSpan(End.Ticks - JsTimeFormat.Ticks);
+                Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(start.TotalMilliseconds, end.TotalMilliseconds, 0));
+            }
+
+        }
+        var  Drive_For_Gant = JsonConvert.SerializeObject(Drive_Gant);
+
+
+
+
+
+    }
+    <p class="p" style="margin:10px auto;">Working Hours of @ViewBag.Name</p>
+    <div style="margin: 10px auto; width: 1400px; height: 800px; position: relative;">
+
+        <div style="width: 300px;height: 80px; position: absolute;top: 0px;left: 0px">
+            <p id="DateResult" style="position: absolute;top: 0px;left: 0px"></p>
+
+            @using (Html.BeginForm("Motor_Working_Hours_For_Date", "Home"))
+        {
+            <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
+            <input type="hidden" value="@ViewBag.Id_Motor" name="Id_Motor" />
+            <input type="hidden" value="@ViewBag.Name" name="Name" />
+            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="date" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 0px"/>
+            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeEnd" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 160px" />
+            <input type="submit" style="position: absolute;top: 70px;left: 0px" />
+
+    }
+        </div>
+
+        <div id="chart_work_motor_hours_for_day" style="width: 400px;height: 400px; position: absolute;top: 300px;left: 0px">
+
+        </div>
+        <div id="chart_work_motor" style="width: 800px;height: 400px; position: absolute;top: 300px;left: 410px">
+
+        </div>
+    </div>
+
+    
+
+    <script>
+
+//*** Create the Bar chart ***\\
+
+// Диаграмма времени работы двигателя в течении выбранного дня
+
+Highcharts.chart('chart_work_motor_hours_for_day',{
+  chart: {
+    type: 'column'
+  },
+  title: {
+        text: ''
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: {
+      type: 'category',
+      title: {
+          text: ''
+      }
+  },
+  yAxis: {
+    title: {
+      text: 'Кол-во часов'
+    }
+
+  },
+  legend: {
+    enabled: false
+  },
+  plotOptions: {
+    series: {
+      borderWidth: 0,
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.1f}'
+      }
+    }
+  },
+
+  tooltip: {
+    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br />'
+  },
+
+  "series": [
+    {
+      "name": "Objects",
+      "colorByPoint": true,
+      "data": [
+
+        {
+          "name": "@ViewBag.Name",
+          "y": @MotorHoursForDay
+
+        }
+
+      ]
+    }
+    ],
+    navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    }
+});
+    </script>
+
+
+
+    <script>
+
+    Highcharts.chart('chart_work_motor', {
+        chart: {
+            type: 'xrange'
+        },
+        title: {
+            text: 'Работа привода'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                hour: '%H:%M'
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            categories: ['@ViewBag.Name'],
+            reversed: true
+        },
+        series: [{
+            name: 'Объекты',
+            // pointPadding: 0,
+            // groupPadding: 0,
+            borderColor: 'green',
+            pointWidth: 20,
+            data: @Html.Raw(Drive_For_Gant)
+        }],
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        }
+    });
+
+
+    </script>
+
+    <script>
+    var picker = new Lightpick({
+    field: document.getElementById('TimeStart'),
+    secondField: document.getElementById('TimeEnd'),
+    singleDate: false,
+    format: 'YYYY-MM-DD',
+    onSelect: function(start, end){
+        var str = '';
+        str += start ? start.format('Do MMMM YYYY') + ' to ' : '';
+        str += end ? end.format('Do MMMM YYYY') : '...';
+        document.getElementById('DateResult').innerHTML = str;
+    }
+});
+    </script>
+
+
+</body>
+
+
+

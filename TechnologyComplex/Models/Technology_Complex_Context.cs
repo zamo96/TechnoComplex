@@ -11,7 +11,11 @@ namespace TechnologyComplex.Models
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<Facility_WorkFlow> Facility_WorkFlow { get; set; }
         public DbSet<WorkFlow_Area> WorkFlow_Area { get; set; }
+        public DbSet<Area_Unit> Area_Unit { get; set; }
+        public DbSet<Unit_Equipment> Unit_Equipment { get; set; }
         public DbSet<Motor> Motor { get; set; }
+        public DbSet<Motor_Value> Motor_Value { get; set; }
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,6 +23,10 @@ namespace TechnologyComplex.Models
                 .HasKey(Fw => new { Fw.Id_Facility, Fw.Id_WorkFLow });
             modelBuilder.Entity<WorkFlow_Area>()
                .HasKey(Wa => new { Wa.Id_WorkFlow, Wa.Id_Area });
+            modelBuilder.Entity<Area_Unit>()
+              .HasKey(Au => new { Au.Id_Area, Au.Id_Unit });
+            modelBuilder.Entity<Unit_Equipment>()
+             .HasKey(Ue => new { Ue.Id_Unit, Ue.Id_Equipment });
         }
 
         public Technology_Complex_Context(DbContextOptions<Technology_Complex_Context> options)

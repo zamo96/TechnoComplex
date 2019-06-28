@@ -55,7 +55,7 @@ namespace TechnologyComplex
               options.UseSqlServer(connection));
             services.AddDbContext<EquipmentContext>(options =>
               options.UseSqlServer(connection));
-            services.AddDbContext<MotorContext>(options =>
+            services.AddDbContext<Motor_ValueContext>(options =>
               options.UseSqlServer(connection));
             services.AddDbContext<Technology_Complex_Context>(options =>
              options.UseSqlServer(connection));
