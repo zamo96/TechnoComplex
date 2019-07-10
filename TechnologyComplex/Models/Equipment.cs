@@ -12,7 +12,8 @@ namespace TechnologyComplex.Models
         public int Id_Pumps { get; set; }
         public int Id_Drives { get; set; }
         public int Equipment_Id { get; set; }
-        public string Type { get; set; } 
+        public string Type { get; set; }
+        public int Unit_Id { get; set; }
         public Equipment()
         {
 

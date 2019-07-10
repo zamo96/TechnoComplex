@@ -33,7 +33,7 @@
 
 }
 <body>
-    <p class="p" style="margin:10px auto;">Units of area @ViewBag.Message</p>
+    <p class="p" style="margin:10px auto;">Units of area @ViewBag.Name_Area</p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
         @{
         foreach (var unit in Model)
@@ -53,8 +53,8 @@
                  <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
             @using (Html.BeginForm("Equipment", "Home", FormMethod.Post))
                  {
-            <input type="hidden" value="@unit.Id" name="Id" />
-            <input class="p" name="Name" value="@unit.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
+            <input type="hidden" value="@unit.Id" name="Id_Unit" />
+            <input class="p" name="Name_Unit" value="@unit.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
                  }
                      </div>
         l += l_setpoint;

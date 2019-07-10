@@ -30,7 +30,7 @@
 
             @using (Html.BeginForm("Valve", "Home", FormMethod.Post))
                  {
-            <input type="hidden" value="@ViewBag.Id" name="id_equipment" />
+            <input type="hidden" value="@ViewBag.Id" name="Id_Equipment" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
             <input class="p"  value="Documentation" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
 
@@ -40,7 +40,7 @@
         <div style="display:table;width: 300px;height: 300px; position: absolute;top: 0px; left: 350px">
             @using (Html.BeginForm("Motor", "Home", FormMethod.Post))
                  {
-            <input type="hidden" value="@ViewBag.Id" name="id_equipment" />
+            <input type="hidden" value="@ViewBag.Id" name="Id_Equipment" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
             <input class="p"  value="Map" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
                  }
@@ -50,13 +50,15 @@
 
         <div style="display:table;width: 300px;height: 300px; position: absolute;top: 0px; left: 700px">
             @using (Html.BeginForm("Motor_Working_Hours", "Home", FormMethod.Post))
-                 {
-            <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
-            <input type="hidden" value="@ViewBag.Id_Motor" name="Id_Motor" />
-            <input type="hidden" value="@ViewBag.Name" name="Name" />
-            <input class="p" value="Working &#x00A;hours" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
-                 }
-                     </div>
+    {
+        <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
+        <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
+        <input type="hidden" value="@ViewBag.Id_Motor" name="Id_Motor" />
+        <input type="hidden" value="@ViewBag.Name" name="Name" />
+        <input type="hidden" value="@ViewBag.Tag" name="Tag" />
+        <input class="p" value="Working &#x00A;hours" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
+}
+        </div>
 
         <div style="display:table;width: 300px;height: 300px; position: absolute;top: 350px; left: 0px">
             @using (Html.BeginForm("Pressure_Sensor", "Home", FormMethod.Post))

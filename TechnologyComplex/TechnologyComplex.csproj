@@ -12,6 +12,7 @@
     <PackageReference Include="NuGet.CommandLine" Version="5.0.2" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
     <PackageReference Include="NUnit.Runners" Version="3.10.0" />
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,8 @@
     <None Remove="Views\Home\Working hours.css" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Models\EquipmentContext %28копировать%29.cs" />
+    <Compile Remove="Models\EquipmentContext %28копировать%29.cs" />
     <Compile Remove="Models\EquipmentContext %28копировать%29.cs" />
   </ItemGroup>
   <ItemGroup>

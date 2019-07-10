@@ -33,7 +33,7 @@
 
 }
 <body>
-    <p class="p" style="margin:10px auto;">Equipments of unit @ViewBag.Message</p>
+    <p class="p" style="margin:10px auto;">Equipments of unit @ViewBag.Name_Unit</p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
         @{
         foreach (var equipment in Model)
@@ -53,8 +53,9 @@
                  <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
             @using (Html.BeginForm("Control_Module", "Home", FormMethod.Post))
                  {
-            <input type="hidden" value="@equipment.Id" name="id_equipment" />
-            <input class="p" name="Name" value="@equipment.Name @equipment.Type" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
+            <input type="hidden" value="@equipment.Id" name="Id_Equipment" />
+
+            <input class="p" name="Name_Equipment" value="@equipment.Name @equipment.Type" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
                  }
                      </div>
         l += l_setpoint;

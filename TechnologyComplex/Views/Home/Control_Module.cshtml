@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    <p class="p" style="margin:10px auto;">Control Modules of Equipment @ViewBag.Name</p>
+    <p class="p" style="margin:10px auto;">Control Modules of @ViewBag.Name</p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
 
 
@@ -40,7 +40,9 @@
         <div style="display:table;width: 300px;height: 300px; position: absolute;top: 0px; left: 350px">
             @using (Html.BeginForm("Motor", "Home", FormMethod.Post))
                  {
-            <input type="hidden" value="@ViewBag.Id" name="id_equipment" />
+
+            <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
+            <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
             <input class="p"  value="Motors" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
                  }

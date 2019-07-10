@@ -35,7 +35,7 @@
 
 }
 <body>
-    <p class="p" style="margin:10px auto;">Work Flows of @ViewBag.Message </p>
+    <p class="p" style="margin:10px auto;">Work Flows of @ViewBag.Name_Facility </p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
         @{
             foreach (var workFlow in Model)
@@ -57,9 +57,9 @@
 
                     @using (Html.BeginForm("Area", "Home", FormMethod.Post))
                     {
-                        <input type="hidden" value="@workFlow.Id" name="Id" />
+                        <input type="hidden" value="@workFlow.Id" name="Id_WorkFlow" />
 
-                        <input class="p" value="@workFlow.Name" name="Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height;top: 0px; left: 0px" />
+                        <input class="p" value="@workFlow.Name" name="Name_WorkFlow" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height;top: 0px; left: 0px" />
                     }
 
                 </div>

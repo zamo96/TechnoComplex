@@ -55,8 +55,8 @@
 
                     @using (Html.BeginForm("Work_Flow", "Home", FormMethod.Post))
                     {
-                        <input type="hidden" value="@facility.Id" name="Id" />
-                        <input type="hidden" value="@facility.Name" name="Name" />
+                        <input type="hidden" value="@facility.Id" name="Id_Facility" />
+                        <input type="hidden" value="@facility.Name" name="Name_Facility" />
                         <input class="p" value="@facility.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
                     }
 

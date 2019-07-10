@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TechnologyComplex.Models.Area>
+﻿@model IEnumerable<TechnologyComplex.Models.History>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -52,6 +52,6 @@
     <tr><td>Id</td><td>Name</td></tr>
     @foreach (var item in Model)
     {
-        <tr><td>@item.Id</td><td>@item.Name</td></tr>
+        <tr><td>@item.TagName</td><td>@item.Value</td></tr>
     }
 </table>

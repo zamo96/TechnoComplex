@@ -62,9 +62,11 @@
         <th>
             @using (Html.BeginForm("Motor_Panel", "Home", FormMethod.Post))
     {
-        <input type="hidden" value="@item.Id_Equipment" name="id_equipment" />
-        <input type="hidden" value="@item.Id" name="id_motor" />
+        <input type="hidden" value="@item.Id_Equipment" name="Id_Equipment" />
+        <input type="hidden" value="@item.Id_Unit" name="Id_Unit" />
+        <input type="hidden" value="@item.Id" name="Id_Motor" />
         <input type="hidden" value="@item.Name" name="Name" />
+        <input type="hidden" value="@item.Tag" name="Tag" />
         <button class="learn-more">
             <div class="circle">
                 <span class="icon arrow"></span>

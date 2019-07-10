@@ -48,29 +48,25 @@
         List<TechnologyComplex.Models.Motor_Value> Work_Hours = Model.Where(x => x.Name.Contains("Work_Hours")).OrderBy(x => x.Date).ToList();
         int MotorHoursForDay = 0;
         DateTime Visible_Date = DateTime.Today;
-        if (Model.Count() == 0)
-        {
-            Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(0, 0, 0));
-        }
-
         DateTime JsTimeFormat;
         DateTime Start;
         DateTime End;
 
-        if (Model.Count() != 0)
+        // For Graph Motor Working Hours in X-Chart
+        if (Drive.Count() == 0)
         {
-            MotorHoursForDay = Convert.ToInt32(Work_Hours.Last().Value.ToString()) - Convert.ToInt32(Work_Hours.First().Value.ToString());
-            Visible_Date = Work_Hours.Last().Date;
-
-
-            for (int i = 0; i < Drive.Count(); i++)
+            Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(0, 0, 0));
+        }
+        else if (Drive.Count() != 0)
+        {
+             for (int i = 0; i < Drive.Count(); i++)
             {
-                if (Drive[i].Value == "1" && (i + 1) < Drive.Count)
+                if ((Drive[i].Value == "True" || Drive[i].Value == "1") && (i + 1) < Drive.Count)
                 {
                     Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].Date,Drive[i + 1].Date));
 
                 }
-                if (Drive[i].Value == "1" && (i + 1) >= Drive.Count)
+                if ((Drive[i].Value == "True" || Drive[i].Value == "1") && (i + 1) >= Drive.Count)
                 {
                     Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].Date, new DateTime(Drive[i].Date.Year, Drive[i].Date.Month, Drive[i].Date.Day, 23, 59, 59)));
                 }
@@ -87,6 +83,15 @@
                 Drive_Gant.Add(new TechnologyComplex.Models.Gant_Diagram(start.TotalMilliseconds, end.TotalMilliseconds, 0));
             }
 
+
+
+        }
+
+// For Graph Motor Working Hours for date in Bar chart
+        if (Work_Hours.Count() != 0)
+        {
+            MotorHoursForDay = Convert.ToInt32(Work_Hours.Last().Value.ToString()) - Convert.ToInt32(Work_Hours.First().Value.ToString());
+            Visible_Date = Work_Hours.Last().Date;
         }
         var  Drive_For_Gant = JsonConvert.SerializeObject(Drive_Gant);
 
@@ -106,8 +111,9 @@
             <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
             <input type="hidden" value="@ViewBag.Id_Motor" name="Id_Motor" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
-            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="date" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 0px"/>
-            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeEnd" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 160px" />
+            <input type="hidden" value="@ViewBag.Tag" name="Tag" />
+            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="TimeStart" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 0px"/>
+            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeEnd"  name="TimeEnd" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 160px" />
             <input type="submit" style="position: absolute;top: 70px;left: 0px" />
 
     }
@@ -198,13 +204,18 @@ Highcharts.chart('chart_work_motor_hours_for_day',{
 
     Highcharts.chart('chart_work_motor', {
         chart: {
-            type: 'xrange'
+            type: 'xrange',
+            panning: true,
+            zoomType: 'xy'
         },
         title: {
             text: 'Работа привода'
         },
         xAxis: {
             type: 'datetime',
+            scrollbar: {
+            enabled: true
+            },
             dateTimeLabelFormats: {
                 hour: '%H:%M'
             }
@@ -218,9 +229,10 @@ Highcharts.chart('chart_work_motor_hours_for_day',{
         },
         series: [{
             name: 'Объекты',
+            color: 'green',
             // pointPadding: 0,
             // groupPadding: 0,
-            borderColor: 'green',
+
             pointWidth: 20,
             data: @Html.Raw(Drive_For_Gant)
         }],

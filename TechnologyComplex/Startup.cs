@@ -34,6 +34,7 @@ namespace TechnologyComplex
             });
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
+            string HistorianConnection = Configuration.GetConnectionString("HistorianConnection");
             // добавляем контекст CompanyContext в качестве сервиса в приложение
             services.AddDbContext<CompanyContext>(options =>
                   options.UseSqlServer(connection));
@@ -59,6 +60,8 @@ namespace TechnologyComplex
               options.UseSqlServer(connection));
             services.AddDbContext<Technology_Complex_Context>(options =>
              options.UseSqlServer(connection));
+            services.AddDbContext<HistoryValuesContext>(options =>
+             options.UseSqlServer(HistorianConnection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
