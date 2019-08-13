@@ -41,13 +41,20 @@ namespace TechnologyComplex.Controllers
             {
                 DateTime DateTimeStart = DateTime.Parse(TimeStart);
                 DateTime DateTimeEnd = DateTime.Parse(TimeEnd);
+                ViewBag.TimeStart = DateTimeStart;
+                ViewBag.TimeEnd = DateTimeEnd;
+                int days = 1;
+                DateTimeEnd += new TimeSpan(days, 0, 0, 0);
 
-
-                return View("Motor_Working_Hours", await Db_Technology_Complex_Context.Motor_Value.Where(x => x.Name.Contains(Tag) && x.Date.Year >= DateTimeStart.Year && x.Date.Year <= DateTimeEnd.Year && x.Date.Month >= DateTimeStart.Month && x.Date.Month <= DateTimeEnd.Month && x.Date.Day >= DateTimeStart.Day && x.Date.Day <= DateTimeEnd.Day).OrderBy(x => x.Date).ToListAsync());
+                string datetimestart = DateTimeStart.ToString("yyyyMMdd");
+                string datetimeend = DateTimeEnd.ToString("yyyyMMdd");
+                
+                return View("Motor_Working_Hours",await Db_HistoryValuesContext.HistoryValues.FromSql(" SELECT * FROM HistoryValues WHERE HistoryValues.TagName LIKE '%" + Tag + "%' AND HistoryValues.DateTime >= '" + datetimestart + "' and HistoryValues.DateTime <= '" + datetimeend + "' ").ToListAsync());
+            
             }
             else
-                return View("Motor_Working_Hours", await Db_Technology_Complex_Context.Motor_Value.Where(x => x.Name.Contains(Tag) && x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day).OrderBy(x => x.Date).ToListAsync());
-         }
+                return View("Motor_Working_Hours", await Db_HistoryValuesContext.HistoryValues.FromSql(" SELECT * FROM HistoryValues WHERE HistoryValues.TagName LIKE '%" + Tag + "%' AND HistoryValues.DateTime between Convert(date,GETDATE()) and  Convert(date,GETDATE()+1) ").ToListAsync());
+        }
 
         public async Task<IActionResult> Facility()
         {
@@ -209,10 +216,15 @@ namespace TechnologyComplex.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //await db.Area.ToListAsync() 
-            return View(await Db_HistoryValuesContext.HistoryValues.FromSql(" DECLARE @StartDate DateTime DECLARE @EndDate DateTime SET @StartDate = '20190709 23:14:47.730' SET @EndDate = '20190710 23:14:47.730' SELECT * FROM HistoryValues WHERE HistoryValues.TagName = 'C201_M01_Drive_On' AND DateTime >= @StartDate AND DateTime <= @EndDate  ").ToListAsync());
-    
-    }
+            //await db.Area.ToListAsync()
+            
+          // string Tag = "C201_M01_Drive_On";
+          //  DateTime TimeStart = new DateTime(2019, 7, 9,0,0,0)
+          //  string timestart = TimeStart.ToString("yyyyMMdd");
+            return View();
+
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Motor_Working_hours(int Id_Motor, int Id_Equipment, string Name, string Tag)
@@ -221,15 +233,15 @@ namespace TechnologyComplex.Controllers
             ViewBag.Id_Motor = Id_Motor;
             ViewBag.Name = Name;
             ViewBag.Tag = Tag;
-
-            return View(await Db_Technology_Complex_Context.Motor_Value.Where(x=>x.Name.Contains(Tag) && x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day).OrderBy(x => x.Date).ToListAsync());
-                
+            ViewBag.TimeStart = DateTime.Today;
+            ViewBag.TimeEnd = DateTime.Today;
+            return View(await Db_HistoryValuesContext.HistoryValues.FromSql(" SELECT * FROM HistoryValues WHERE HistoryValues.TagName LIKE '%" + Tag + "%' AND HistoryValues.DateTime between Convert(date,GETDATE()) and  Convert(date,GETDATE()+1) ").ToListAsync());
         }
 
         public async Task<IActionResult> Automat_Kvadrablock_Working_hours()
         {
 
-            return View(await Db_Motor_Context.Motor_Value.Where(x => x.Date.Year == Today.Year && x.Date.Month == Today.Month && x.Date.Day == Today.Day && x.Name == "Kvadrablock_Work_Hours").OrderBy(x => x.Date).ToListAsync());
+            return View(await Db_HistoryValuesContext.HistoryValues.Where(x => x.DateTime.Year == Today.Year && x.DateTime.Month == Today.Month && x.DateTime.Day == Today.Day && x.TagName == "Kvadrablock_Work_Hours").OrderBy(x => x.DateTime).ToListAsync());
         }
 
         public IActionResult Filling_automats()

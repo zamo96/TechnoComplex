@@ -1,5 +1,4 @@
-﻿@model IEnumerable<TechnologyComplex.Models.History>
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -48,10 +47,3 @@
 </html>
 
 
-<table class="table">
-    <tr><td>Id</td><td>Name</td></tr>
-    @foreach (var item in Model)
-    {
-        <tr><td>@item.TagName</td><td>@item.Value</td></tr>
-    }
-</table>

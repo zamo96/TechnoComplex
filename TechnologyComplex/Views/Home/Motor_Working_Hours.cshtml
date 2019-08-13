@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TechnologyComplex.Models.Motor_Value>
+﻿@model IEnumerable<TechnologyComplex.Models.HistoryValues>
 @using Newtonsoft.Json
 @{
     ViewData["Title"] = "Home Page";
@@ -44,10 +44,14 @@
     @{
         List<TechnologyComplex.Models.Gant_Diagram> Drive_Gant = new List<TechnologyComplex.Models.Gant_Diagram>();
         List<TechnologyComplex.Models.Time_Help> Drive_Time = new List<TechnologyComplex.Models.Time_Help>();
-        List<TechnologyComplex.Models.Motor_Value> Drive = Model.Where(x => x.Name.Contains("Drive_On")).OrderBy(x => x.Date).ToList();
-        List<TechnologyComplex.Models.Motor_Value> Work_Hours = Model.Where(x => x.Name.Contains("Work_Hours")).OrderBy(x => x.Date).ToList();
-        int MotorHoursForDay = 0;
-        DateTime Visible_Date = DateTime.Today;
+        List<TechnologyComplex.Models.HistoryValues> Drive = Model.Where(x => x.TagName.Contains("Drive_On")).OrderBy(x => x.TagName).ToList();
+        List<TechnologyComplex.Models.HistoryValues> Work_Hours = Model.Where(x => x.TagName.Contains("Work_Hours")).OrderBy(x => x.TagName).ToList();
+        double MotorHoursForDay = 0;
+
+        DateTime Visible_Date_Start = ViewBag.TimeStart;
+        DateTime Visible_Date_End = ViewBag.TimeEnd;
+
+
         DateTime JsTimeFormat;
         DateTime Start;
         DateTime End;
@@ -61,14 +65,14 @@
         {
              for (int i = 0; i < Drive.Count(); i++)
             {
-                if ((Drive[i].Value == "True" || Drive[i].Value == "1") && (i + 1) < Drive.Count)
+                if ((Drive[i].Value == 1 || Drive[i].Value == 1) && (i + 1) < Drive.Count)
                 {
-                    Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].Date,Drive[i + 1].Date));
+                    Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].DateTime,Drive[i + 1].DateTime));
 
                 }
-                if ((Drive[i].Value == "True" || Drive[i].Value == "1") && (i + 1) >= Drive.Count)
+                if ((Drive[i].Value == 1 || Drive[i].Value == 1) && (i + 1) >= Drive.Count)
                 {
-                    Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].Date, new DateTime(Drive[i].Date.Year, Drive[i].Date.Month, Drive[i].Date.Day, 23, 59, 59)));
+                    Drive_Time.Add(new TechnologyComplex.Models.Time_Help(Drive[i].DateTime, new DateTime(Drive[i].DateTime.Year, Drive[i].DateTime.Month, Drive[i].DateTime.Day, 23, 59, 59)));
                 }
             }
 
@@ -90,8 +94,8 @@
 // For Graph Motor Working Hours for date in Bar chart
         if (Work_Hours.Count() != 0)
         {
-            MotorHoursForDay = Convert.ToInt32(Work_Hours.Last().Value.ToString()) - Convert.ToInt32(Work_Hours.First().Value.ToString());
-            Visible_Date = Work_Hours.Last().Date;
+            MotorHoursForDay = (Convert.ToDouble(Work_Hours.Last().Value.ToString()) - Convert.ToDouble(Work_Hours.First().Value.ToString()))/60;
+
         }
         var  Drive_For_Gant = JsonConvert.SerializeObject(Drive_Gant);
 
@@ -112,8 +116,8 @@
             <input type="hidden" value="@ViewBag.Id_Motor" name="Id_Motor" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
             <input type="hidden" value="@ViewBag.Tag" name="Tag" />
-            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="TimeStart" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 0px"/>
-            <input type="text" value="@Visible_Date.Date.ToString("yyyy-MM-dd")" id="TimeEnd"  name="TimeEnd" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 160px" />
+            <input type="text" value="@Visible_Date_Start.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="TimeStart" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 0px"/>
+            <input type="text" value="@Visible_Date_End.Date.ToString("yyyy-MM-dd")" id="TimeEnd"  name="TimeEnd" style="width: 140px;height: 40px; position: absolute;top: 25px;left: 160px" />
             <input type="submit" style="position: absolute;top: 70px;left: 0px" />
 
     }
