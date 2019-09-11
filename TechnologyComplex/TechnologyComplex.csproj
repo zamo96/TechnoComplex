@@ -36,6 +36,7 @@
     <Content Remove="wwwroot\css\package.json" />
     <Content Remove="wwwroot\css\lightpick.css" />
     <Content Remove="wwwroot\js\lightpick.js" />
+    <Content Remove="Views\Shared\_SidebarMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\css\Motor_Working_Hours.cshtml">
@@ -45,6 +46,9 @@
   <ItemGroup>
     <None Include="wwwroot\css\lightpick.css" />
     <None Include="wwwroot\js\lightpick.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\AdminLTE\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

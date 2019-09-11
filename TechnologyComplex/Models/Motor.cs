@@ -6,6 +6,7 @@ namespace TechnologyComplex.Models
         public int Id { get; set; }
         public int Id_Equipment { get; set; }
         public int Id_Unit { get; set; }
+        public int Id_Area { get; set; }
         public string Name { get; set; } // название двигателя
         public string Tag { get; set; } // название tag
 

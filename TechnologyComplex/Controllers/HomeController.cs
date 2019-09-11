@@ -137,11 +137,12 @@ namespace TechnologyComplex.Controllers
                 }
             }
             ViewBag.Name_Area = Name_Area;
+            ViewBag.Id_Area = Id_Area;
             return View(units);
         }
 
         [HttpPost]
-        public IActionResult Equipment(int Id_Unit, string Name_Unit)
+        public IActionResult Equipment(int Id_Unit, int Id_Area, string Name_Unit, string Name_Area, string format)
         {
             
             List<int> Equipments = new List<int>();
@@ -151,6 +152,13 @@ namespace TechnologyComplex.Controllers
                 {
                     Equipments.Add(equipment.Id_Equipment);
                 }
+            }
+            if(format == "Skip")
+            {
+                ViewBag.Name = Name_Area;
+                ViewBag.Id_Area = Id_Area;
+                ViewBag.Format = format;
+                return View("Control_Module");
             }
               if (Equipments.Count == 0)
               {
@@ -195,10 +203,16 @@ namespace TechnologyComplex.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Motor(int Id_Equipment, int Id_Unit, string Name)
+        public async Task<IActionResult> Motor(int Id_Equipment, int Id_Unit, int Id_Area, string Name, string format)
         {
 
             ViewBag.Name = Name;
+            if (format == "Skip")
+            {
+                ViewBag.Id = Id_Area;
+                return View(await Db_Technology_Complex_Context.Motor.Where(x => x.Id_Area == Id_Area).OrderBy(x => x.Id).ToListAsync());
+
+            }
             if (Id_Equipment != 0)
             {
                 ViewBag.Id = Id_Equipment;

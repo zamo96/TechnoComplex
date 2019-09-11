@@ -1,0 +1,196 @@
+﻿@using TechnologyComplex.Controllers
+
+@{
+    var controllerName = ViewContext.RouteData.Values["Controller"].ToString();
+    var actionName = ViewContext.RouteData.Values["Action"].ToString();
+
+    var isUserActionsLog = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(HomeController.Index);
+    var isErrorsLog = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(HomeController.Errors);
+    var isUsers = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(HomeController.Index);
+    var isClients = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(HomeController.Clients);
+
+    var isSettings = controllerName == nameof(HomeController).ToControllerName();
+    var isEmailSettings = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(SettingsController.EditMailerSettings);
+    var isSmsSettings = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(SettingsController.EditSmsSettings);
+    var isDadataSettings = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(SettingsController.EditDadataSettings);
+
+    var isContractor = controllerName == nameof(HomeController).ToControllerName();
+    var isMakeOfCar = controllerName == nameof(HomeController).ToControllerName();
+    var isBodyType = controllerName == nameof(HomeController).ToControllerName();
+    var isAccountTerm = controllerName == nameof(HomeController).ToControllerName();
+
+    var isCargoType = controllerName == nameof(HomeController).ToControllerName();
+    var isPackingType = controllerName == nameof(HomeController).ToControllerName();
+    var isLoadingType = controllerName == nameof(HomeController).ToControllerName();
+
+    var isActiveRequest = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(RequestController.Index);
+    var isArchiveRequest = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(RequestController.Archive);
+    var isAllRequest = controllerName == nameof(HomeController).ToControllerName() && actionName == nameof(RequestController.All);
+
+    string IsActive(params bool[] items) => items.Any(t => t) ? "active" : string.Empty;
+}
+
+<ul class="sidebar-menu">
+
+    <li class="header">Модули</li>
+
+    @if (this.User.IsAdmin())
+    {
+        <li class="treeview @IsActive(isUserActionsLog, isErrorsLog, isSettings, isUsers, isClients)">
+
+            <a href="#" style="cursor: default;">
+                <i class="fa fa-user-secret fa-fw"></i> <span>Адинистрирование</span>
+            </a>
+
+            <ul class="treeview-menu menu-open" style="display: block;">
+
+                <li class="treeview @IsActive(isUserActionsLog, isErrorsLog)">
+
+                    <a href="#" style="cursor: default;">
+                        <i class="fa fa-history fa-fw"></i> <span>Логи</span>
+                    </a>
+
+                    <ul class="treeview-menu menu-open" style="display: block;">
+
+                        <li class="@IsActive(isUserActionsLog)">
+                            <a asp-controller="Log" asp-action="Index">
+                                <i class="fas fa-user-clock fa-fw"></i> Действия
+                            </a>
+                        </li>
+
+                        <li class="@IsActive(isErrorsLog)">
+                            <a asp-controller="Log" asp-action="Errors">
+                                <i class="fas fa-exclamation-triangle fa-fw"></i> Ошибки
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
+
+                <li class="@IsActive(isSettings)">
+                    <a href="#" style="cursor: default;">
+                        <i class="fa fa-cogs fa-fw"></i> Настройки
+                    </a>
+
+                    <ul class="treeview-menu menu-open" style="display: block;">
+                        <li class="@(isEmailSettings ? "active" : string.Empty)">
+                            <a href="@Url.Action("EditMailerSettings", "Settings")"><i class="fas fa-at fa-fw"></i> Email</a>
+                        </li>
+
+                        <li class="@(isSmsSettings ? "active" : string.Empty)">
+                            <a href="@Url.Action("EditSmsSettings", "Settings")"><i class="fa fa-mobile-alt fa-fw"></i> SMS</a>
+                        </li>
+
+                        <li class="@(isDadataSettings ? "active" : string.Empty)">
+                            <a href="@Url.Action("EditDadataSettings", "Settings")"><i class="fas fa-database fa-fw"></i> Dadata</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="@IsActive(isUsers)">
+                    <a asp-controller="Account" asp-action="Index">
+                        <i class="fa fa-address-book fa-fw"></i> Пользователи
+                    </a>
+                </li>
+
+                <li class="@IsActive(isClients)">
+                    <a asp-controller="Account" asp-action="Clients">
+                        <i class="fa fa-male fa-fw"></i> Клиенты
+                    </a>
+                </li>
+
+            </ul>
+
+        </li>
+    }
+
+    <li class="treeview @IsActive(isActiveRequest, isArchiveRequest)">
+
+        <a href="#" style="cursor: default;">
+            <i class="fa fa-phone-volume fa-fw"></i> <span>Заказы</span>
+        </a>
+
+        <ul class="treeview-menu menu-open" style="display: block;">
+
+            <li class="@IsActive(isActiveRequest)">
+                <a asp-controller="Request" asp-action="Index">
+                    <i class="fas fa-shipping-fast fa-fw"></i> Активные заявки
+                </a>
+            </li>
+
+            <li class="@IsActive(isArchiveRequest)">
+                <a asp-controller="Request" asp-action="Archive">
+                    <i class="fas fa-warehouse fa-fw"></i> Оплаченные заявки
+                </a>
+            </li>
+
+
+            <li class="@IsActive(isAllRequest)">
+                <a asp-controller="Request" asp-action="All">
+                    <i class="fas fa-tasks fa-fw"></i> Все
+                </a>
+            </li>
+
+        </ul>
+
+    </li>
+
+    @if (this.User.IsAdmin() || this.User.IsManager())
+    {
+        <li class="treeview @IsActive(isPackingType, isCargoType, isContractor, isMakeOfCar, isLoadingType, isBodyType, isAccountTerm)">
+
+            <a href="#" style="cursor: default;">
+                <i class="fa fa-archive fa-fw"></i> <span>Справочники</span>
+            </a>
+
+            <ul class="treeview-menu menu-open" style="display: block;">
+
+                <li class="@IsActive(isContractor)">
+                    <a asp-controller="Contractor" asp-action="Index">
+                        <i class="fa fa-users fa-fw"></i> Контрагенты
+                    </a>
+                </li>
+
+                <li class="@IsActive(isPackingType)">
+                    <a asp-controller="PackingType" asp-action="Index">
+                        <i class="fas fa-cubes fa-fw"></i> Виды упаковки
+                    </a>
+                </li>
+
+                <li class="@IsActive(isCargoType)">
+                    <a asp-controller="CargoType" asp-action="Index">
+                        <i class="fas fa-people-carry fa-fw"></i> Категории грузов
+                    </a>
+                </li>
+
+                <li class="@IsActive(isMakeOfCar)">
+                    <a asp-controller="MakeOfCar" asp-action="Index">
+                        <i class="fa fa-car fa-fw"></i> Марки автомобилей
+                    </a>
+                </li>
+
+                <li class="@IsActive(isLoadingType)">
+                    <a asp-controller="LoadingType" asp-action="Index">
+                        <i class="fas fa-truck-loading fa-fw"></i> Способы погрузки
+                    </a>
+                </li>
+
+                <li class="@IsActive(isBodyType)">
+                    <a asp-controller="BodyType" asp-action="Index">
+                        <i class="fa fa-truck fa-fw"></i> Типы кузова
+                    </a>
+                </li>
+
+                <li class="@IsActive(isAccountTerm)">
+                    <a asp-controller="AccountTerm" asp-action="Index">
+                        <i class="far fa-handshake fa-fw"></i> Условия оплаты
+                    </a>
+                </li>
+
+            </ul>
+
+        </li>
+    }
+
+</ul>
