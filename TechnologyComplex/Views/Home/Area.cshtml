@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<TechnologyComplex.Models.Area>
 <!DOCTYPE html>
 <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <meta charset="utf-8">
     <title>Main</title>
     <style>
@@ -24,7 +25,7 @@
 @{
     int h = 230;
     int w = 295;
-    int t = 0;
+    int t = 75;
     int l = 0;
     int t_setpoint = 240;
     int l_setpoint = 310;
@@ -35,31 +36,45 @@
 <body>
     <p class="p" style="margin:10px auto;">Areas of @ViewBag.Name_WorkFlow</p>
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
-        @{
-        foreach (var area in Model)
-        {
-            number_of_column++;
-
-            if (number_of_column == (columns + 1))
+        <div>
+            @using (Html.BeginForm("Work_Flow", "Home", FormMethod.Post))
             {
-                t += t_setpoint;
-                l = 0;
-                number_of_column = 1;
+                <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+                <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+                <input class="fas fa-angle-double-left" value="Back" type="submit" />
             }
-            string height = h.ToString() + "px";
-            string width = w.ToString() + "px";
-            string top = t.ToString() + "px";
-            string left = l.ToString() + "px";
-                 <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
-            @using (Html.BeginForm("Unit", "Home", FormMethod.Post))
-                 {
-            <input type="hidden" value="@area.Id" name="Id_Area" />
-            <input class="p" name="Name_Area" value="@area.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
-                 }
-                     </div>
-        l += l_setpoint;
+        </div>
+        @{
+            foreach (var area in Model)
+            {
+                number_of_column++;
 
-    }
+                if (number_of_column == (columns + 1))
+                {
+                    t += t_setpoint;
+                    l = 0;
+                    number_of_column = 1;
+                }
+                string height = h.ToString() + "px";
+                string width = w.ToString() + "px";
+                string top = t.ToString() + "px";
+                string left = l.ToString() + "px";
+        <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
+            @using (Html.BeginForm("Unit", "Home", FormMethod.Post))
+
+{
+        <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+        <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+        <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+        <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+        <input type="hidden" value="@area.Id" name="Id_Area" />
+        <input class="p" name="Name_Area" value="@area.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
+
+}
+        </div>
+                l += l_setpoint;
+
+            }
         }
 
     </div>

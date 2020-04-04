@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using TechnologyComplex.Models;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace TechnologyComplex
 {
@@ -64,7 +65,29 @@ namespace TechnologyComplex
              options.UseSqlServer(connection));
             services.AddDbContext<HistoryValuesContext>(options =>
              options.UseSqlServer(HistorianConnection));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+
+           
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll"));
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,16 +102,17 @@ namespace TechnologyComplex
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+           
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseCors("AllowAll");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Facility}/{id?}");
             });
         }
     }

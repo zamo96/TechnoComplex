@@ -15,7 +15,8 @@ namespace TechnologyComplex.Models
         public DbSet<Unit_Equipment> Unit_Equipment { get; set; }
         public DbSet<Motor> Motor { get; set; }
         public DbSet<Motor_Value> Motor_Value { get; set; }
-      
+        public DbSet<Motor_Documents> Motor_Documents { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,8 @@ namespace TechnologyComplex.Models
               .HasKey(Au => new { Au.Id_Area, Au.Id_Unit });
             modelBuilder.Entity<Unit_Equipment>()
              .HasKey(Ue => new { Ue.Id_Unit, Ue.Id_Equipment });
+            modelBuilder.Entity<Motor_Documents>()
+             .HasKey(Me => new { Me.Id_Motor, Me.Number_Of_Document });
         }
 
         public Technology_Complex_Context(DbContextOptions<Technology_Complex_Context> options)

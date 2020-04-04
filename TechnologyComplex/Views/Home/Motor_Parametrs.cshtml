@@ -1,0 +1,84 @@
+﻿@model TechnologyComplex.Models.Motor
+<!DOCTYPE html>
+<style>
+
+        div {
+            border-radius: 5px;
+        }
+
+        input {
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+
+        .p {
+            font-family: ‘Lato’, sans-serif;
+            display: table-cell;
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        td, th {
+            font-family: ‘Lato’, sans-serif;
+            border: solid 1px black;
+            padding: 30px;
+            position: relative;
+        }
+
+        td {
+            font-family: ‘Lato’, sans-serif;
+            font-size: 44px;
+            font-weight: 300;
+            line-height: 58px;
+            margin: 0 0 58px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="~/css/ButtonHover.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <p class="p" style="margin:10px auto;">Parameters of @Model.Name</p>
+
+    <form asp-action="Motor_Parametrs" asp-controller="home">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Id_Equipment)
+        @Html.HiddenFor(m => m.Id_Unit)
+        @Html.HiddenFor(m => m.Id_Area)
+        @Html.HiddenFor(m => m.Name)
+        @Html.HiddenFor(m => m.Tag)
+
+
+        <div class="form-group">
+            <label asp-for="Serial_Number" class="control-label">Серийный Номер</label>
+            <input type="text" asp-for="Serial_Number" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Serial_Order" class="control-label">Заказной Номер</label>
+            <input type="text" asp-for="Serial_Order" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Company_Name" class="control-label">Название компании</label>
+            <input type="text" asp-for="Company_Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Mass" class="control-label">Масса</label>
+            <input type="text" asp-for="Mass" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Year_expl" class="control-label">Год введения в эксплуатацию</label>
+            <input type="text" asp-for="Year_expl" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Отправить" class="btn btn-default" />
+        </div>
+    </form>
+
+

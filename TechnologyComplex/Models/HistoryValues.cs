@@ -9,12 +9,12 @@ namespace TechnologyComplex.Models
         [Key]
         public DateTime DateTime { get; set; }
         public string TagName { get; set; } // название тэга
-        public double Value { get; set; } // значение тэга
+        public double? Value { get; set; } // значение тэга
         public string vValue { get; set; } 
       
         public HistoryValues()
         {
-
+          
         }
     }
 }

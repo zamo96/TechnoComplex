@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<TechnologyComplex.Models.Unit>
 <!DOCTYPE html>
 <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <meta charset="utf-8">
     <title>Main</title>
     <style>
@@ -24,7 +25,7 @@
 @{
     int h = 230;
     int w = 310;
-    int t = 0;
+    int t = 95;
     int l = 0;
     int t_setpoint = 240;
     int l_setpoint = 310;
@@ -34,15 +35,36 @@
 }
 <body>
     <p class="p" style="margin:10px auto;">Units of area @ViewBag.Name_Area</p>
-     @using (Html.BeginForm("Equipment", "Home", FormMethod.Post))
-                 {
-            <input type="hidden" value="Skip" name="format" />
-            <input type="hidden" value=@ViewBag.Id_Area name="Id_Area" />
-            <input type="hidden" value=@ViewBag.Name_Area name="Name_Area" />
-            <input class="p" value="All Units" type="submit" style="background:#e3dede" />
-                 }
+
     <div style="margin:10px auto; width: 1400px;height: 800px;position: relative;">
         @{
+              <div style="position: relative;">
+            @using (Html.BeginForm("Area", "Home", FormMethod.Post))
+         {
+        <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+        <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+        <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+        <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+        <input class="fas fa-angle-double-left" value="Back" type="submit" />
+         }
+              </div>
+
+              <div style="position: relative; top: 10px">
+                  @using (Html.BeginForm("Equipment", "Home", FormMethod.Post))
+            {
+              <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+              <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+              <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+              <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+              <input type="hidden" value="Skip" name="format" />
+              <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+              <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
+              <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
+
+              <input class="p" value="All Units" name="Name_Unit" type="submit" style="background:#e3dede; left: 0px" />
+            }
+              </div>
+
         foreach (var unit in Model)
         {
             number_of_column++;
@@ -58,9 +80,15 @@
             string top = t.ToString() + "px";
             string left = l.ToString() + "px";
         <div style="display:table;width: @width;height: @height; position: absolute;top: @top; left: @left">
+
             @using (Html.BeginForm("Equipment", "Home", FormMethod.Post))
     {
-        <input type="hidden" value=@ViewBag.Id_Area name="Id_Area" />
+        <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+        <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+        <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+        <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+        <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+        <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
         <input type="hidden" value="@unit.Id" name="Id_Unit" />
         <input class="p" name="Name_Unit" value="@unit.Name" type="submit" style="background:#e3dede; position: absolute ;width: @width;height: @height; top: 0px; left: 0px" />
 }

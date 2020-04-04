@@ -1,5 +1,7 @@
-﻿<!DOCTYPE html>
+﻿  @using TechnologyComplex.Controllers
+<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,7 +38,42 @@
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
 </head>
+
+
+@{
+    var controllerName = ViewContext.RouteData.Values["Controller"].ToString();
+    var actionName = ViewContext.RouteData.Values["Action"].ToString();
+    string Name_Facility = ViewBag.Name_Facility;
+    string Name_Area = ViewBag.Name_Area;
+    string Name_WorkFlow = ViewBag.Name_WorkFlow;
+    string Name_Unit = ViewBag.Name_Unit;
+    var isFacilities = actionName == nameof(HomeController.Facility);
+    var isPetmol = Name_Facility == "Petmol";
+
+    var isAcceptance = Name_WorkFlow == "Aceptance";
+    var isPasteurize = Name_WorkFlow == "Pasteurize";
+    var isUltrafiltration = Name_WorkFlow == "Ultrafiltration";
+    var isPacking = Name_WorkFlow == "Packing";
+    var isFilling = Name_WorkFlow == "Filling";
+    var isStorage = Name_WorkFlow == "Storage";
+
+var isSP_Tanks = Name_Area == "SP Tanks";
+var isCS_Tanks = Name_Area == "CS Tanks";
+var isRM_Tanks = Name_Area == "RM Tanks";
+var isSM_Tanks = Name_Area == "SM Tanks";
+var isFK_Tanks = Name_Area == "FK Tanks";
+var isFY_Tanks = Name_Area == "FY Tanks";
+var isFS_Tanks = Name_Area == "FS Tanks";
+var isFC_Tanks = Name_Area == "FC Tanks";
+var isESL_Tanks = Name_Area == "ESL Tanks";
+
+var isAll_Units = Name_Unit == "All Units";
+var isLine_From_SP_to_CS = Name_Unit == "Line From SP to CS";
+
+    string IsActive(params bool[] items) => items.Any(t => t) ? "active" : string.Empty;
+}
 <body class="hold-transition skin-black-light sidebar-mini">
     <div class="wrapper">
 
@@ -44,9 +81,9 @@
             <!-- Logo -->
             <a href="index2.html" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>A</b>LT</span>
+                <span class="logo-mini"><b>T</b>BR</span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Admin</b>LTE</span>
+                <span class="logo-lg"><b>Techno</b>BAR</span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -62,18 +99,19 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">TechnologyComplex</a>
+                        <a asp-area="" asp-controller="Home" asp-action="Facility" class="navbar-brand">TechnologyComplex</a>
                     </div>
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Facility">Home</a></li>
                             <li><a asp-area="" asp-controller="Home" asp-action="Facility">Facilityes</a></li>
                             <li><a asp-area="" asp-controller="Home" asp-action="Work_Flow">Work Flows</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Working_hours">Working Hours</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Motor_MultyWorkingHours">Working Hours</a></li>
+
                         </ul>
                     </div>
                 </div>
-                
+
             </nav>
         </header>
         <!-- Left side column. contains the logo and sidebar -->
@@ -83,11 +121,11 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="~/AdminLTE/dist/img/mtv.png" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>Alexander Pierce</p>
-                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                        <p>Matvey Zakharov</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Software engineer</a>
                     </div>
                 </div>
                 <!-- search form -->
@@ -103,159 +141,84 @@
                 </form>
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
-                <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">MAIN NAVIGATION</li>
-                    <li class="active treeview">
+            </section>
+                <ui class="sidebar-menu" data-widget="tree">
+
+                    <li class="treeview active ">
                         <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                            <i class="fa fa-share"></i>
+                            <span>Navigation Bar</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
+
+
                         <ul class="treeview-menu">
-                            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-files-o"></i>
-                            <span>Layout Options</span>
-                            <span class="pull-right-container">
-                                <span class="label label-primary pull-right">4</span>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-                            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-                            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-                            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="pages/widgets.html">
-                            <i class="fa fa-th"></i> <span>Widgets</span>
-                            <span class="pull-right-container">
-                                <small class="label pull-right bg-green">new</small>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-pie-chart"></i>
-                            <span>Charts</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-                            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-                            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-                            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-laptop"></i>
-                            <span>UI Elements</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> General</a></li>
-                            <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Icons</a></li>
-                            <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Buttons</a></li>
-                            <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Sliders</a></li>
-                            <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Timeline</a></li>
-                            <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-edit"></i> <span>Forms</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
-                            <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i> Advanced Elements</a></li>
-                            <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-table"></i> <span>Tables</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-                            <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="pages/calendar.html">
-                            <i class="fa fa-calendar"></i> <span>Calendar</span>
-                            <span class="pull-right-container">
-                                <small class="label pull-right bg-red">3</small>
-                                <small class="label pull-right bg-blue">17</small>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/mailbox/mailbox.html">
-                            <i class="fa fa-envelope"></i> <span>Mailbox</span>
-                            <span class="pull-right-container">
-                                <small class="label pull-right bg-yellow">12</small>
-                                <small class="label pull-right bg-green">16</small>
-                                <small class="label pull-right bg-red">5</small>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-folder"></i> <span>Examples</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="pages/examples/invoice.html"><i class="fa fa-circle-o"></i> Invoice</a></li>
-                            <li><a href="pages/examples/profile.html"><i class="fa fa-circle-o"></i> Profile</a></li>
-                            <li><a href="pages/examples/login.html"><i class="fa fa-circle-o"></i> Login</a></li>
-                            <li><a href="pages/examples/register.html"><i class="fa fa-circle-o"></i> Register</a></li>
-                            <li><a href="pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
-                            <li><a href="pages/examples/404.html"><i class="fa fa-circle-o"></i> 404 Error</a></li>
-                            <li><a href="pages/examples/500.html"><i class="fa fa-circle-o"></i> 500 Error</a></li>
-                            <li><a href="pages/examples/blank.html"><i class="fa fa-circle-o"></i> Blank Page</a></li>
-                            <li><a href="pages/examples/pace.html"><i class="fa fa-circle-o"></i> Pace Page</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-share"></i> <span>Multilevel</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-                            <li class="treeview">
+                            <li class="treeview active">
                                 <a href="#">
-                                    <i class="fa fa-circle-o"></i> Level One
+                                    <i class="fa fa-university"></i>Facilities
                                     <span class="pull-right-container">
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </span>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
+                                    <li class="treeview @IsActive(isPetmol)">
+                                        <a href="#">
+                                            <i class="fa fa-circle-o"></i>Petmol
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                                <ul class="treeview-menu">
+                                                        <li class="active"><a href="#"><i class="fa fa-square"></i> Work Flows</a></li>
+                                                        <li class="@IsActive(isAcceptance)"><a href="#"><i class="fa fa-circle-o"></i> Acceptance</a></li>
+                                                        <li class="@IsActive(isPasteurize)"><a href="#"><i class="fa fa-circle-o"></i> Pasteurize</a></li>
+                                                        <li class="@IsActive(isUltrafiltration)"><a href="#"><i class="fa fa-circle-o"></i> Ultrafiltration</a></li>
+                                                        <li class="@IsActive(isPacking)"><a href="#"><i class="fa fa-circle-o"></i> Packing</a></li>
+                                                        <li class="@IsActive(isFilling)"><a href="#"><i class="fa fa-circle-o"></i> Filling</a></li>
+                                                        <li class="@IsActive(isStorage) treeview">
+                                                <a href="#">
+                                                    <i class="fa fa-circle-o"></i>Storage
+                                                    <span class="pull-right-container">
+                                                        <i class="fa fa-angle-left pull-right"></i>
+                                                    </span>
+                                                </a>
+                                                     <ul class="treeview-menu">
+                                                            <li class="active"><a href="#"><i class="fa fa-square-o"></i> Tanks</a></li>
+                                                            <li class="@IsActive(isSP_Tanks) treeview">
+                                                            <a href="#">
+                                                            <i class="fa fa-circle-o"></i> SP Tanks
+                                                            <span class="pull-right-container">
+                                                            <i class="fa fa-angle-left pull-right"></i>
+                                                            </span>
+                                                            </a>
+                                                    <ul class="treeview-menu">
+                                                        <li class="active"><a href="#"><i class="fa fa-cube"></i> Units</a></li>
+                                                        <li class="@IsActive(isAll_Units)" ><a href="#"><i class="fa fa-circle-o"></i> All Units</a></li>
+                                                        <li class="@IsActive(isLine_From_SP_to_CS)"><a href="#"><i class="fa fa-circle-o"></i> Line From SP to CS</a></liclass="@IsActive(isLine_From_SP_to_CS)">
+                                                        </ul>
+
+                                                            </li>
+                                                    <li class="@IsActive(isCS_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> CS Tanks</a></li>
+                                                    <li class="@IsActive(isRM_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> RM Tanks</a></li>
+                                                    <li class="@IsActive(isSM_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> SM Tanks</a></li>
+                                                    <li class="@IsActive(isFK_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> FK Tanks</a></li>
+                                                    <li class="@IsActive(isFY_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> FY Tanks</a></li>
+                                                    <li class="@IsActive(isFS_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> FS Tanks</a></li>
+                                                    <li class="@IsActive(isFC_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> FC Tanks</a></li>
+                                                    <li class="@IsActive(isESL_Tanks)"><a href="#"><i class="fa fa-circle-o"></i> ESL Tanks</a></li>
+                                                </ul>
+                                                </li>
+                                            </ul>
+
+                                    </li>
+                                    
+
+
                                     <li class="treeview">
                                         <a href="#">
-                                            <i class="fa fa-circle-o"></i> Level Two
+                                            <i class="fa fa-circle-o"></i> Checkhov
                                             <span class="pull-right-container">
                                                 <i class="fa fa-angle-left pull-right"></i>
                                             </span>
@@ -266,17 +229,15 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
+</li>
+
                         </ul>
                     </li>
-                    <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-                    <li class="header">LABELS</li>
-                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-                    <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-                    <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
-                </ul>
-            </section>
+                    </ui>
+
+
+
+
             <!-- /.sidebar -->
         </aside>
 
@@ -291,10 +252,9 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                <b>Version</b> 2.4.13
+                <b></b>
             </div>
-            <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
-            reserved.
+
         </footer>
 
         <!-- Control Sidebar -->
@@ -493,7 +453,7 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery 3 -->
-    <script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+
     <!-- jQuery UI 1.11.4 -->
     <script src="~/AdminLTE/bower_components/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -527,5 +487,119 @@
     <script src="~/AdminLTE/dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/AdminLTE/dist/js/demo.js"></script>
+
+    <script type="text/javascript">
+
+
+
+         $.AdminLTESidebarTweak = {};
+
+    $.AdminLTESidebarTweak.options = {
+            EnableRemember: true,
+            NoTransitionAfterReload: true
+            //Removes the transition after page reload.
+    };
+
+    $(function () {
+        "use strict";
+
+        $("body").on("collapsed.pushMenu", function() {
+            if($.AdminLTESidebarTweak.options.EnableRemember) {
+                localStorage.setItem("toggleState", "closed");
+            }
+        });
+            
+        $("body").on("expanded.pushMenu", function() {
+                if($.AdminLTESidebarTweak.options.EnableRemember) {
+                    localStorage.setItem("toggleState", "opened");
+                } 
+        });
+
+        if ($.AdminLTESidebarTweak.options.EnableRemember) {
+            var toggleState = localStorage.getItem("toggleState");
+            if (toggleState == 'closed'){
+                if ($.AdminLTESidebarTweak.options.NoTransitionAfterReload) {
+                    $("body").addClass('sidebar-collapse hold-transition').delay(100).queue(function() {
+                        $(this).removeClass('hold-transition');
+                    });
+                } else {
+                    $("body").addClass('sidebar-collapse');
+                }
+            }
+        }
+    });
+
+         $.AdminLTE.tree = function (menu) {
+    var _this = this;
+    var animationSpeed = $.AdminLTE.options.animationSpeed;
+    $(document).off('click', menu + ' li a')
+      .on('click', menu + ' li a', function (e) {
+        //Get the clicked link and the next element
+        var $this = $(this);
+        var checkElement = $this.next();
+
+        //If the menu is not visible open it
+        if ((checkElement.is('.treeview-menu')) && (!checkElement.is(':visible'))) {
+          //Get the parent menu
+          var parent = $this.parents('ul').first();
+          //Get the parent li
+          var parent_li = $this.parent("li");
+
+          //Open the target menu and add the menu-open class
+          checkElement.slideDown(animationSpeed, function () {
+            //Add the class active to the parent li
+            checkElement.addClass('menu-open');
+            parent_li.addClass('active');
+            //Fix the layout in case the sidebar stretches over the height of the window
+            _this.layout.fix();
+          });
+        }
+        //if this isn't a link, prevent the page from being redirected
+        if (checkElement.is('.treeview-menu')) {
+          e.preventDefault();
+        }
+      });
+  };
+
+
+          function postToUrl(path, params, method) {
+    method = method || "post"; // Устанавливаем метод отправки.
+
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+    for(var key in params) {
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", key);
+        hiddenField.setAttribute("value", params[key]);
+
+        form.appendChild(hiddenField);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+
+          var url = window.location;
+
+// for sidebar menu entirely but not cover treeview
+        $('ul.sidebar-menu a').filter(function() {
+            return this.href == url;
+        }).parent().addClass('active');
+
+// for treeview
+        $('ul.treeview-menu a').filter(function() {
+            return this.href == url;
+        }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
+
+
+
+
+
+
+    </script>
+
 </body>
 </html>

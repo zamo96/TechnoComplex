@@ -1,0 +1,368 @@
+﻿@model TechnologyComplex.Models.Motor
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Home Page";
+}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/lightpick.css" />
+<!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->  
+<link rel="stylesheet" href="~/AdminLTE/dist/css/bootstrap-datetimepicker.min.css" />
+
+
+  <!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+
+   <!-- Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/modules/xrange.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+ <!-- ajax -->
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script src="~/js/lightpick.js"></script>
+ <!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+
+<!-- 4. Подключить библиотеку moment -->
+<script src="~/AdminLTE/dist/js/moment-with-locales.min.js"></script>
+
+<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
+<script src="~/AdminLTE/dist/js/bootstrap-datetimepicker.min.js"></script>
+
+
+<style>
+
+
+    .highcharts-figure, .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 400px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #EBEBEB;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+
+</style>
+
+@{
+
+   var Select22 = ViewBag.Select2;
+   var PreSelect = ViewBag.PreSelect; 
+   var barcharts = ViewBag.BarCharts;
+   var forbarcharts = ViewBag.ForBarChart;
+        DateTime Visible_Date_Start = ViewBag.TimeStart;
+            DateTime Visible_Date_End = ViewBag.TimeEnd;
+DateTime Visible_Year_Start = ViewBag.YearStart;
+DateTime Visible_Year_End = ViewBag.YearEnd;
+
+            int days;
+            if (Visible_Date_Start == Visible_Date_End)
+            {
+
+                days = 1;
+            }
+            else if (Visible_Date_End.Date != null)
+            {
+
+                days = Convert.ToInt32((Visible_Date_End.Date - Visible_Date_Start.Date).TotalDays) + 1;
+
+            }
+            else
+            {
+
+                days = Convert.ToInt32((Visible_Date_End.Date - Visible_Date_Start.Date).TotalDays) + 1;
+            }
+
+}
+
+
+<body onload="myFunc()">
+
+
+    <div style="margin: 10px auto; width: 1400px; height: 1200px; position: relative; border:2px;">
+
+        <form method="POST" action="Motor_MultyWorkingHours">
+            <div style="border:2px ;width: 300px; height: 400px;position: relative;">
+                <p style="font-size: 18px; left: 20px">Выберете Двигатели</p>
+                <select name="myselect[]" class="js-example-basic-multiple" multiple="multiple" id="myselect" style="width:300px" ></select>
+                <p style="font-size: 18px;">Выберете дату просмотра моточасов</p>
+                <input type="text"  value="@Visible_Date_Start.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="TimeStart" style="width: 140px;height: 40px;" />
+                <input type="text" value="@Visible_Date_End.Date.ToString("yyyy-MM-dd")" id="TimeEnd" name="TimeEnd" style="width: 140px;height: 40px; " />
+                <p id="DateResult" style="font-size: 18px; left: 20px"></p>
+                <div style="border:2px ;width: 120px; height: 40px;position: relative;top:50px;">
+                    <input type="submit" class="btn btn-info" name="goo" value="Отправить" style="width: 120px;height: 40px;">
+                </div>
+            </div>
+
+            <div style="border:2px ;width: 300px; height: 400px;left: 350px;top:0px; position: absolute;">
+                <p style="font-size: 18px; left: 20px">Выберете Время</p>
+                <div style="display:flex">
+               С  <input type="text" class="form-control" value="@Visible_Year_Start.Date.ToString("yyyy/MM/dd")" id="datetimepicker1" name="MounthStart" style="width: 130px;height: 30px;" /> 
+               По <input type="text" class="form-control" value="@Visible_Year_End.Date.ToString("yyyy/MM/dd")" id="datetimepicker2" name="MounthEnd" style="width: 130px; height: 30px;" />
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+        </form>
+
+
+
+        <script type="text/javascript">
+        $(function () {
+                $('#datetimepicker1').datetimepicker({
+                viewMode: 'years',
+                format: 'YYYY/MM/01'
+            });
+             $('#datetimepicker2').datetimepicker({
+                viewMode: 'years',
+                format: 'YYYY/MM/01'
+            });
+            });
+            </script>
+
+        <div id="chart_work_motor_hours_for_day" style="width: 400px;height: 400px; position: absolute;top: 320px;left: 0px">
+
+        </div>
+        <figure class="highcharts-figure">
+            <div id="chart_work_motor" style="width: 800px;height: 400px; position: absolute;top: 320px;left: 410px">
+
+            </div>
+        </figure>
+
+    </div>
+
+
+</body>
+
+
+
+<script type="text/javascript">
+
+
+
+
+      $("#myselect").select2({
+        placeholder: "Select motors",
+        width: '300px',
+        data:@Html.Raw(Select22) 
+        });
+
+    
+     $('#myselect').select2().val(@Html.Raw(PreSelect)).trigger("change");
+
+
+    function SelectShow(){
+    //получим DOM элемента select по ID
+var elm = document.getElementById("myselect");
+
+//в этот массив будем отбирать выбранные значения
+var values = [];
+
+//случай мульти-режима
+if (elm.multiple) {
+  //перебираем массив опций
+  for (var i = 0; i < elm.options.length; i ++) {
+    //если опция выбрана - добавим её в массив
+    if (elm.options[i].selected)
+       values.push(elm.options[i].value);
+  }
+//случай одиночного выбора в select
+} else
+  values.push(elm.value);
+
+//выведем результат в консоль
+console.log(values);
+
+
+        }
+</script>
+
+    <script>
+    var picker = new Lightpick({
+    field: document.getElementById('TimeStart'),
+    secondField: document.getElementById('TimeEnd'),
+    singleDate: false,
+    format: 'YYYY-MM-DD',
+    onSelect: function(start, end){
+        var str = '';
+        str += start ? start.format('Do MMMM YYYY') + ' to ' : '';
+        str += end ? end.format('Do MMMM YYYY') : '...';
+        document.getElementById('DateResult').innerHTML = str;
+    }
+});
+    </script>
+
+
+
+
+    <script>
+    function myFunc(start, end) {
+            var str = '';
+            var start = document.getElementById('TimeStart').value;
+            var end = document.getElementById('TimeEnd').value;
+            str += start ? start + ' to ' : '';
+            str += end ? end : '...';
+            document.getElementById('DateResult').innerHTML = str;
+        };
+
+    </script>
+
+    <script>
+
+//*** Create the Bar chart ***\\
+
+// Диаграмма времени работы двигателя в течении выбранного дня
+
+Highcharts.chart('chart_work_motor_hours_for_day',{
+  chart: {
+    type: 'column'
+  },
+  title: {
+        text: 'Total hours for @days days'
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: {
+      type: 'category',
+      title: {
+          text: ''
+      }
+  },
+  yAxis: {
+    title: {
+      text: 'Moto hours'
+    }
+
+  },
+  legend: {
+    enabled: false
+  },
+  plotOptions: {
+    series: {
+      borderWidth: 0,
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.1f}'
+      }
+    }
+  },
+
+  tooltip: {
+    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br />'
+  },
+
+  "series": [
+    {
+      "name": "Objects",
+      "colorByPoint": true,
+      "data": @Html.Raw(barcharts)
+    }
+    ],
+    navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    }
+});
+    </script>
+
+    <script>
+    Highcharts.chart('chart_work_motor', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Total hours for mounths'
+            },
+
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec'
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Moto hours (hh)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: @Html.Raw(forbarcharts) 
+            });
+    </script>
+

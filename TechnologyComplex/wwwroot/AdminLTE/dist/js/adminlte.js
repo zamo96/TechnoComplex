@@ -1,4 +1,4 @@
-/*! AdminLTE app.js
+﻿/*! AdminLTE app.js
 * ================
 * Main JS application file for AdminLTE v2. This file
 * should be included in all pages. It controls some layout
@@ -1048,6 +1048,9 @@ throw new Error('AdminLTE requires jQuery')
       this.bindedResize = true;
     }
 
+
+
+
     $(Selector.sidebarMenu).on('expanded.tree', function () {
       this.fix();
       this.fixSidebar();
@@ -1078,7 +1081,8 @@ throw new Error('AdminLTE requires jQuery')
       var postSetHeight;
 
       if (windowHeight >= sidebarHeight + headerHeight) {
-        $(Selector.contentWrapper).css('min-height', windowHeight - neg);
+          $(Selector.contentWrapper).css('min-height', windowHeight - neg);
+          $(tree).css('cssText', 'display: none !important;');
         postSetHeight = windowHeight - neg;
       } else {
         $(Selector.contentWrapper).css('min-height', sidebarHeight);
@@ -1102,7 +1106,7 @@ throw new Error('AdminLTE requires jQuery')
       }
       return;
     }
-
+      else { $(data['element']).children('.treeview:not(.menu-open)').children('.treeview-menu').css('cssText','display: none !important'); }
     // Enable slimscroll for fixed layout
     if (this.options.slimscroll) {
       if (typeof $.fn.slimScroll !== 'undefined') {
@@ -1157,4 +1161,51 @@ throw new Error('AdminLTE requires jQuery')
   $(window).on('load', function () {
     Plugin.call($('body'));
   });
+
+    $.AdminLTESidebarTweak = {};
+
+$.AdminLTESidebarTweak.options = {
+    EnableRemember: true,
+    NoTransitionAfterReload: false
+    //Removes the transition after page reload.
+};
+
+$(function () {
+    "use strict";
+
+    $("body").on("collapsed.pushMenu", function(){
+        if($.AdminLTESidebarTweak.options.EnableRemember){
+            var toggleState = 'opened';
+            if($("body").hasClass('sidebar-collapse')){
+                toggleState = 'closed';
+            }
+            document.cookie = "toggleState="+toggleState;
+        } 
+    });
+
+    if($.AdminLTESidebarTweak.options.EnableRemember){
+        var re = new RegExp('toggleState' + "=([^;]+)");
+        var value = re.exec(document.cookie);
+        var toggleState = (value != null) ? unescape(value[1]) : null;
+        if(toggleState == 'closed'){
+            if($.AdminLTESidebarTweak.options.NoTransitionAfterReload){
+                $("body").addClass('sidebar-collapse hold-transition').delay(100).queue(function(){
+                    $(this).removeClass('hold-transition'); 
+                });
+            }else{
+                $("body").addClass('sidebar-collapse');
+            }
+        }
+    }
+    if($.AdminLTESidebarTweak.options.NoTransitionAfterReload){
+                $("body").addClass('sidebar-collapse hold-transition').delay(100).queue(function(){
+                    $(this).removeClass('hold-transition');
+                     console.log("with transition"); 
+                });
+            }else{
+                $("body").addClass('sidebar-collapse');
+                console.log("without transition");
+            }
+});
+
 }(jQuery);

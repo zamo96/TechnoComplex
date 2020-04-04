@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <meta charset="utf-8">
     <title>Main</title>
     <style>
@@ -28,22 +29,57 @@
 
                  <div style="display:table;width: 300px;height: 300px; position: absolute;top: 0px; left: 0px">
 
+                         @{
+                         if (ViewBag.Format == "Skip" || ViewBag.Id_Equipment == 0)
+                         {
+                         using (Html.BeginForm("Unit", "Home", FormMethod.Post))
+                         {
+                         <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+                         <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+                         <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+                         <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+                         <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+                         <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
+                         <input class="fas fa-angle-double-left" value="Back" type="submit" />
+                         }
+                         }
+                         else
+                         {
+                         using (Html.BeginForm("Equipment", "Home", FormMethod.Post))
+                         {
+                         <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+                         <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+                         <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+                         <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+                         <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+                         <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
+                         <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
+                         <input class="fas fa-angle-double-left" value="Back" type="submit" />
+                         }
+                         }
+
+                              }
             @using (Html.BeginForm("Valve", "Home", FormMethod.Post))
                  {
             <input type="hidden" value="@ViewBag.Id" name="id_equipment" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
-            <input class="p"  value="Valves" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
+            <input class="p"  value="Valves" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 50px; left: 0px" />
 
                  }
                      </div>
 
-        <div style="display:table;width: 300px;height: 300px; position: absolute;top: 0px; left: 350px">
+        <div style="display:table;width: 300px;height: 300px; position: absolute;top: 50px; left: 350px">
             @using (Html.BeginForm("Motor", "Home", FormMethod.Post))
                  {
-
+            <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+            <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+            <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+            <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
             <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
             <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
+            <input type="hidden" value="@ViewBag.Name_Unit" name="Name_Unit" />
             <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+            <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
             <input type="hidden" value="@ViewBag.Name" name="Name" />
             <input type="hidden" value="@ViewBag.Format" name="format" />
             <input class="p"  value="Motors" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
@@ -52,7 +88,7 @@
 
 
 
-        <div style="display:table;width: 300px;height: 300px; position: absolute;top: 0px; left: 700px">
+        <div style="display:table;width: 300px;height: 300px; position: absolute;top: 50px; left: 700px">
             @using (Html.BeginForm("Temperature_Sensor", "Home", FormMethod.Post))
                  {
             <input type="hidden" value="@ViewBag.Id" name="id_equipment" />
@@ -66,7 +102,7 @@
             { 
         <input type="hidden" value="@ViewBag.Id" name="id_equipment" />
         <input type="hidden" value="@ViewBag.Name" name="Name" />
-            <input class="p" value="Pressure &#x00A;sensors" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 0px; left: 0px" />
+            <input class="p" value="Pressure &#x00A;sensors" type="submit" style="background:#e3dede; position: absolute ;width: 300px ;height: 300px; top: 50px; left: 0px" />
             }
         </div>
 
