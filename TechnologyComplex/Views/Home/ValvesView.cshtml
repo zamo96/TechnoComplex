@@ -1,0 +1,162 @@
+﻿@model IEnumerable<TechnologyComplex.Models.HistoryValues>
+
+@using Newtonsoft.Json
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="~/css/lightpick.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+    <script src="~/js/lightpick.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/modules/xrange.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <meta charset="utf-8">
+
+
+    <title>Main</title>
+    <style>
+
+
+
+
+
+        div {
+            border-radius: 5px;
+        }
+
+        .p {
+            display: table-cell;
+            font-size: x-large;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        .highcharts-figure, .highcharts-data-table table {
+            min-width: 360px;
+            max-width: 800px;
+            margin: 1em auto;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #EBEBEB;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+
+
+        #mychart {
+            max-width: 1400px;
+            margin: 35px auto;
+        }
+    </style>
+</head>
+<body>
+    @{
+        List<TechnologyComplex.Models.Model_For_LineChart> Line_Chart = new List<TechnologyComplex.Models.Model_For_LineChart>();
+        foreach (var item in Model)
+        {
+            Line_Chart.Add(new Model_For_LineChart(item.DateTime, Math.Round(Convert.ToDouble(item.Value), 2)));
+        }
+        var line_chart = JsonConvert.SerializeObject(Line_Chart);
+        DateTime Visible_Date_Start = ViewBag.TimeStart;
+        DateTime Visible_Date_End = ViewBag.TimeEnd;
+    }
+
+    <p style="margin: 0px auto;font-size: 18px;">Выберете дату просмотра</p>
+
+    <p id="DateResult" style="position: absolute;top: 20px;left: 0px"></p>
+
+    @using (Html.BeginForm("Valve_For_Date", "Home"))
+    {
+        <input type="hidden" value="@ViewBag.Id_Equipment" name="Id_Equipment" />
+        <input type="hidden" value="@ViewBag.Id_Valve" name="Id_Valve" />
+        <input type="hidden" value="@ViewBag.Name" name="Name" />
+        <input type="hidden" value="@ViewBag.Tag" name="Tag" />
+        <input type="text" value="@Visible_Date_Start.Date.ToString("yyyy-MM-dd")" id="TimeStart" name="TimeStart" style="width: 140px;height: 40px; position: absolute;top: 50px;left: 10px" />
+        <input type="text" value="@Visible_Date_End.Date.ToString("yyyy-MM-dd")" id="TimeEnd" name="TimeEnd" style="width: 140px;height: 40px; position: absolute;top: 50px;left: 165px" />
+        <input type="submit" class="btn btn-info" style="width: 200px;height: 40px; position: absolute;top: 50px;left: 340px" />
+
+
+
+    }
+
+    <div id="mychart"></div>
+    <script>
+        var options = {
+            chart: {
+                type: 'line'
+            },
+            series: [{
+                data: @Html.Raw(line_chart)
+            }],
+            stroke: {
+                curve: 'stepline',
+            },
+    xaxis: {
+        type: 'datetime'
+    }
+        }
+
+        var chart = new ApexCharts(document.querySelector("#mychart"), options);
+
+        chart.render();</script>
+
+    <script>var picker = new Lightpick({
+            field: document.getElementById('TimeStart'),
+            secondField: document.getElementById('TimeEnd'),
+            singleDate: false,
+            format: 'YYYY-MM-DD',
+            onSelect: function (start, end) {
+                var str = '';
+                str += start ? start.format('Do MMMM YYYY') + ' to ' : '';
+                str += end ? end.format('Do MMMM YYYY') : '...';
+                document.getElementById('DateResult').innerHTML = str;
+            }
+        });</script>
+
+</body>
+
+
+

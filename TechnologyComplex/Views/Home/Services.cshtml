@@ -1,0 +1,226 @@
+﻿@model IEnumerable<TechnologyComplex.Models.Service>
+<!DOCTYPE html>
+
+
+
+<style>
+
+    .vl {
+        border-left: 2px solid;
+        height: 800px;
+        position: absolute;
+        left: 50%;
+        margin-left: -3px;
+        top: 0;
+    }
+
+    div {
+        border-radius: 5px;
+    }
+
+    input {
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        width: 100px;
+    }
+
+    .p {
+        font-family: ‘Lato’, sans-serif;
+        display: table-cell;
+        font-size: 44px;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle
+    }
+
+
+
+    #attach {
+        width: 70%;
+        height: 40vh;
+    }
+
+    bs-example {
+        font-family: sans-serif;
+        position: relative;
+        margin: 100px;
+    }
+
+    .typeahead, .tt-query, .tt-hint {
+        border: 2px solid #CCCCCC;
+        border-radius: 8px;
+        font-size: 22px; /* Set input font size */
+        height: 30px;
+        line-height: 30px;
+        outline: medium none;
+        padding: 8px 12px;
+        width: 396px;
+    }
+
+    .typeahead {
+        background-color: #FFFFFF;
+    }
+
+        .typeahead:focus {
+            border: 2px solid #0097CF;
+        }
+
+    .tt-query {
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    }
+
+    .tt-hint {
+        color: #999999;
+    }
+
+    .tt-menu {
+        background-color: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        margin-top: 12px;
+        padding: 8px 0;
+        width: 422px;
+    }
+
+    .tt-suggestion {
+        font-size: 22px; /* Set suggestion dropdown font size */
+        padding: 3px 20px;
+    }
+
+        .tt-suggestion:hover {
+            cursor: pointer;
+            background-color: #0097CF;
+            color: #FFFFFF;
+        }
+
+        .tt-suggestion p {
+            margin: 0;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        table td {
+            padding: 22px 36px;
+            font-size: 15pt;
+        }
+
+        table thead tr {
+            font-weight: bold;
+            border-top: 1px solid #e8e9eb;
+        }
+
+        table tr {
+            border-bottom: 1px solid #e8e9eb;
+        }
+
+        table tbody tr:hover {
+            background: #e8f6ff;
+        }
+
+
+    .semi-transparent-button {
+        display: block;
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: 8px;
+        width: 80%;
+        max-width: 200px;
+        background: #fff; /* запасной цвет для старых браузеров */
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        letter-spacing: 1px;
+        transition: all 0.3s ease-out;
+    }
+</style>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+<meta charset="utf-8">
+<body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+
+    @{
+        var objects_typesdowntime = ViewBag.Objects_TypesDowntime;
+        var Select2 = ViewBag.Select2;
+    }
+
+
+
+    <p class="p" style="margin:10px auto;">Список сервисов @ViewBag.Name </p>
+
+    <div id="modDialog" class="modal fade">
+        <div id="dialogContent" class="modal-dialog"></div>
+    </div>
+
+    <div style="position:relative; display:inline-block; left:5px;top:10px">
+        @Html.ActionLink("Добавить Проводимый Сервис", "AddService", new { Id_Motor = @ViewBag.Id }, new { @class = "addMotor btn btn-primary btn-sm", @role = "button" })
+    </div>
+
+    <div style="position:absolute; width:30%;max-height:60%;top:130px">
+
+        <div id="ServicesResult" style="width:100%;max-height:40%;">
+            <table>
+
+                <tr><td>Номер проводимового сервиса</td><td>Наименования сервиса</td><td>Наработка часов при проведении сервиса</td><td>Комментарий</td><td>Дата проводимого сервиса</td></tr>
+                @foreach (var item in Model)
+                {
+            <tr>
+
+                <td>
+                    @item.Number
+                </td>
+                <td>
+                    @item.Name_Of_Service
+                </td>
+                <td>
+                    @item.Work_Hours
+                </td>
+                <td>
+                    @item.Commentary
+                </td>
+                <td>
+                    @item.Date
+                </td>
+            </tr>
+                }
+            </table>
+        </div>
+
+
+    </div>
+
+
+
+
+    <script type="text/javascript">$(function () {
+            $.ajaxSetup({ cache: false });
+            $(".addMotor").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })</script>
+
+
+
+
+
+
+</body>
+

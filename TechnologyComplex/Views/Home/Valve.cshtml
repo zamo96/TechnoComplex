@@ -1,0 +1,156 @@
+﻿@model IEnumerable<TechnologyComplex.Models.Valve>
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="~/css/ButtonHover.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <title>Main</title>
+
+    <style>
+
+
+
+        div {
+            border-radius: 5px;
+        }
+
+        input {
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+
+        .p {
+            font-family: ‘Lato’, sans-serif;
+            display: table-cell;
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        td, th {
+            font-family: ‘Lato’, sans-serif;
+            border: solid 1px black;
+            padding: 30px;
+            position: relative;
+        }
+
+        td {
+            font-family: ‘Lato’, sans-serif;
+            font-size: 44px;
+            font-weight: 300;
+            line-height: 58px;
+            margin: 0 0 58px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <p class="p" style="margin:10px auto;">Valves of @ViewBag.Name</p>
+    <div style="margin:10px auto; width: 1400px;height: 3000px;position: relative;">
+        <div style="position: relative;top:0px">
+            @Html.ActionLink("Добавить клапан", "AddValve", new { id = 0 }, new { @class = "addMotor btn btn-primary", @role = "button" })
+        </div>
+
+
+
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog"></div>
+        </div>
+
+
+
+
+        <div style="position: relative; height:40px; top:10px">
+            @using (Html.BeginForm("Equipment", "Home", FormMethod.Post))
+            {
+                <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+                <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+                <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+                <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+                <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+                <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
+                <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
+                <input type="hidden" value="@ViewBag.Name" name="Name_Unit" />
+                <input type="hidden" value="@ViewBag.Format" name="format" />
+                <input class="fas fa-angle-double-left" value="Back" type="submit" />
+            }
+        </div>
+        <table border="1" cellspacing="100" style=" width: 1200px ">
+            <tr><td>Name of Valve</td><td>Model</td></tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <th>
+                        <div style="display: inline-block;">
+                            @item.Name
+                        </div>
+                        <div style="position: absolute;right:300px;display: inline-block;">
+                            @Html.ActionLink("Изменить Клапан", "ChangeValve", new { id = item.Id }, new { @class = "addMotor btn btn-primary", @role = "button", style = "background-color: orange;" })
+                        </div>
+                        <div style="position: absolute;right:100px;display: inline-block;">
+                            @Html.ActionLink("Удалить Клапан", "DeleteValve", new { id = item.Id }, new { @class = "addMotor btn btn-primary", @role = "button", style = "background-color: red;" })
+                        </div>
+
+                    </th>
+                    <th>
+                        @using (Html.BeginForm("ValvesView", "Home", FormMethod.Post))
+                        {
+                            <input type="hidden" value="@item.Id_Equipment" name="Id_Equipment" />
+                            <input type="hidden" value="@item.Id_Unit" name="Id_Unit" />
+                            <input type="hidden" value="@item.Id" name="Id_Valve" />
+                            <input type="hidden" value="@item.Name" name="Name" />
+                            <input type="hidden" value="@item.Tag" name="Tag" />
+
+                            <button class="learn-more">
+                                <div class="circle">
+                                    <span class="icon arrow"></span>
+                                </div>
+                                <p class="button-text" style="font-size: 1rem">View More</p>
+                            </button>
+                        }
+
+
+                    </th>
+
+                </tr>
+            }
+        </table>
+
+
+
+
+
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".addMotor").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+﻿@model TechnologyComplex.Models.Motor
+<html>
+<head>
+
+    <meta charset="utf-8">
+</head>
+<body>
+    <style>
+
+        div {
+            border-radius: 5px;
+        }
+
+        input {
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+
+        .p {
+            font-family: ‘Lato’, sans-serif;
+            display: table-cell;
+            font-size: 44px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        td, th {
+            font-family: ‘Lato’, sans-serif;
+            border: solid 1px black;
+            padding: 30px;
+            position: relative;
+        }
+
+        td {
+            font-family: ‘Lato’, sans-serif;
+            font-size: 44px;
+            font-weight: 300;
+            line-height: 58px;
+            margin: 0 0 58px;
+        }
+    </style>
+    @using (Html.BeginForm("ChangeMotor", "Home", FormMethod.Post))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+                <h4>Изменить двигатель</h4>
+            </div>
+            <div class="modal-body">
+
+
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.Serial_Number)
+                @Html.HiddenFor(m => m.Serial_Order)
+                @Html.HiddenFor(m => m.Company_Name)
+                @Html.HiddenFor(m => m.Mass)
+                @Html.HiddenFor(m => m.Year_expl)
+
+                <dt>Зона</dt>
+                <dd>@Html.DropDownList("Id_Area", ViewBag.Areas as SelectList, new { @class = "form-control" })</dd>
+
+
+                <dt>Оборудование</dt>
+                <dd> @Html.DropDownList("Id_Equipment", ViewBag.Equipments as SelectList, new { @class = "form-control" })</dd>
+                <dt>Юнит</dt>
+                <dd> @Html.DropDownList("Id_Unit", ViewBag.Units as SelectList, new { @class = "form-control" })</dd>
+                <dt>Наименование двигателя</dt>
+                <dd> @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })</dd>
+                <dt>Тэг</dt>
+                <dd> @Html.EditorFor(m => m.Tag, new { htmlAttributes = new { @class = "form-control" } })</dd>
+
+                <div style="position:relative;top:10px;">
+                    <dd><input style="text-align: left;" type="submit" value="Изменить" /></dd>
+                </div>
+
+            </div>
+
+        </div>
+    }
+</body>
+</html>

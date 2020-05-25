@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TechnologyComplex.Models.Service>
+
+<table>
+    <tr><td>Номер проводимового сервиса</td><td>Наименования сервиса</td><td>Наработка часов при проведении сервиса</td><td>Комментарий</td><td>Дата проводимого сервиса</td></tr>
+    @foreach (var item in Model)
+    {
+<tr>
+
+
+    <td>
+        @item.Number
+    </td>
+    <td>
+        @item.Name_Of_Service
+    </td>
+    <td>
+        @item.Work_Hours
+    </td>
+    <td>
+        @item.Commentary
+    </td>
+    <td>
+        @item.Date
+    </td>
+</tr>
+    }
+</table>

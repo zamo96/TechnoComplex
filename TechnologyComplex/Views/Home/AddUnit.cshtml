@@ -1,0 +1,56 @@
+﻿@model TechnologyComplex.Models.Unit
+<html>
+<head>
+
+    <meta charset="utf-8">
+</head>
+<body>
+    <style>
+
+
+
+        div {
+            border-radius: 5px;
+        }
+
+        input {
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+    </style>
+    @using (Html.BeginForm("AddUnit", "Home", FormMethod.Post))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+                <h4>Добавить Юнит</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <input type="hidden" value="@ViewBag.Id_Facility" name="Id_Facility" />
+                <input type="hidden" value="@ViewBag.Name_Facility" name="Name_Facility" />
+                <input type="hidden" value="@ViewBag.Id_WorkFlow" name="Id_WorkFlow" />
+                <input type="hidden" value="@ViewBag.Name_WorkFlow" name="Name_WorkFlow" />
+                <input type="hidden" value="@ViewBag.Id_New_Unit" name="Id" />
+                <input type="hidden" value="@ViewBag.format" name="format" />
+                <input type="hidden" value="@ViewBag.Name_Area" name="Name_Area" />
+                <input type="hidden" value="@ViewBag.Id_Area" name="Id_Area" />
+                <input type="hidden" value="@ViewBag.Id_Unit" name="Id_Unit" />
+
+
+
+                <dt>Название юнита</dt>
+                <dd> @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })</dd>
+
+                <div style="position:relative;top:10px;">
+                    <dd><input style="text-align: left;" type="submit" value="Добавить" /></dd>
+                </div>
+
+            </div>
+
+        </div>
+    }
+</body>
+</html>
